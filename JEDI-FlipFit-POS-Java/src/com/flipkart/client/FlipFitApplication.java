@@ -14,17 +14,17 @@ public class FlipFitApplication {
             
             switch (mainChoice) {
                 case 1:
-                    // Login
+                    // Login: delegate to the respective client based on role.
                     handleLogin(scanner);
                     break;
                 
                 case 2:
-                    // Registration of the gym customer
+                    // Registration for gym customer
                     registerGymCustomer(scanner);
                     break;
                 
                 case 3:
-                    // Registration of the gym owner
+                    // Registration for gym owner
                     registerGymOwner(scanner);
                     break;
                 
@@ -54,7 +54,7 @@ public class FlipFitApplication {
         System.out.println("====================================");
         System.out.println("      Welcome to FlipFit App");
         System.out.println("====================================");
-        System.out.println("Enter the choice:");
+        System.out.println("Enter your choice:");
         System.out.println("1. Login");
         System.out.println("2. Registration of the Gym Customer");
         System.out.println("3. Registration of the Gym Owner");
@@ -64,7 +64,7 @@ public class FlipFitApplication {
     }
 
     /**
-     * Handles user login and routes to the appropriate menu based on role.
+     * Handles user login and routes to the appropriate client menu based on role.
      */
     private static void handleLogin(Scanner scanner) {
         System.out.print("Enter username: ");
@@ -76,18 +76,17 @@ public class FlipFitApplication {
         System.out.print("Enter role (gym customer, gym owner, gym admin): ");
         String role = scanner.nextLine().trim().toLowerCase();
 
-        // You would typically validate the username, password, and role
-        // with your service/business logic here. For now, we assume it’s correct.
-        
+        // In a real application, you would validate username, password, and role.
+        // Here we assume they are correct and simply delegate to the respective menu.
         switch (role) {
             case "gym owner":
-                showGymOwnerMenu(scanner, username);
+                GymOwnerClient.showGymOwnerMenu(scanner, username);
                 break;
             case "gym customer":
-                showGymCustomerMenu(scanner, username);
+                CustomerClient.showGymCustomerMenu(scanner, username);
                 break;
             case "gym admin":
-                showGymAdminMenu(scanner, username);
+                AdminClient.showGymAdminMenu(scanner, username);
                 break;
             default:
                 System.out.println("Invalid role! Returning to main menu.");
@@ -109,10 +108,7 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        // Additional info like city preference can be asked here.
-        
-        // Call your service layer to register the customer, e.g.:
-        // UserService.registerCustomer(name, email, password);
+        // TODO: Call your service layer to register the customer.
         
         System.out.println("Gym Customer registered successfully!");
     }
@@ -131,16 +127,13 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        // Additional info related to gym center can be asked here.
-        
-        // Call your service layer to register the owner, e.g.:
-        // UserService.registerOwner(name, email, password);
+        // TODO: Call your service layer to register the owner.
         
         System.out.println("Gym Owner registered successfully!");
     }
 
     /**
-     * Allows user to change password.
+     * Allows user to change their password.
      */
     private static void changePassword(Scanner scanner) {
         System.out.println("===== Change Password =====");
@@ -153,121 +146,8 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        // Validate old password, then update with new password in your service layer.
+        // TODO: Validate and update password via your service layer.
         
         System.out.println("Password changed successfully!");
-    }
-
-    /**
-     * Sub-menu for Gym Owner after login.
-     */
-    private static void showGymOwnerMenu(Scanner scanner, String username) {
-        int choice;
-        do {
-            System.out.println("\n===== Gym Owner Menu =====");
-            System.out.println("1. Add Gym Center");
-            System.out.println("2. View My Centers");
-            System.out.println("3. Logout");
-            System.out.print("Enter your choice: ");
-            choice = Integer.parseInt(scanner.nextLine());
-            
-            switch (choice) {
-                case 1:
-                    // Add Gym Center logic
-                    System.out.println("Adding a new gym center...");
-                    // e.g. GymService.addCenter(ownerId, centerDetails);
-
-					// Add Slots logic
-                    System.out.println("Adding slots to a center...");
-                    // e.g. GymService.addSlots(centerId, slotDetails);
-                    break;
-                case 2:
-                    // View My Centers logic
-                    System.out.println("Viewing your gym centers...");
-                    // e.g. GymService.viewMyCenters(ownerId);
-                    break;
-                case 3:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice! Please try again.");
-            }
-        } while (choice != 3);
-    }
-
-    /**
-     * Sub-menu for Gym Customer after login.
-     */
-    private static void showGymCustomerMenu(Scanner scanner, String username) {
-        int choice;
-        do {
-            System.out.println("\n===== Gym Customer Menu =====");
-            System.out.println("1. View Centers by City");
-            System.out.println("2. Book a Slot");
-            System.out.println("3. View Booked Slots");
-            System.out.println("4. Logout");
-            System.out.print("Enter your choice: ");
-            choice = Integer.parseInt(scanner.nextLine());
-            
-            switch (choice) {
-                case 1:
-                    // View Centers by City
-                    System.out.println("Enter city: ");
-                    String city = scanner.nextLine();
-                    // e.g. GymService.viewCentersByCity(city);
-                    break;
-                case 2:
-                    // Book a Slot
-                    System.out.println("Booking a slot...");
-                    // e.g. BookingService.bookSlot(customerId, centerId, slotId);
-					// Make Payment
-                    System.out.println("Proceed to payment...");
-                    // e.g. PaymentService.processPayment(bookingId, amount, method);
-                    break;
-                case 3:
-                    // View Booked Slots
-                    System.out.println("Viewing booked slots...");
-                    // e.g. BookingService.viewBookings(customerId);
-                    break;
-                case 4:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice! Please try again.");
-            }
-        } while (choice != 4);
-    }
-
-    /**
-     * Sub-menu for Gym Admin (Flipkart Admin) after login.
-     */
-    private static void showGymAdminMenu(Scanner scanner, String username) {
-        int choice;
-        do {
-            System.out.println("\n===== Gym Admin Menu =====");
-            System.out.println("1. Approve Gym Centers");
-            System.out.println("2. View All Gym Centers");
-            System.out.println("3. Logout");
-            System.out.print("Enter your choice: ");
-            choice = Integer.parseInt(scanner.nextLine());
-            
-            switch (choice) {
-                case 1:
-                    // Approve Gym Centers
-                    System.out.println("Approving gym centers...");
-                    // e.g. AdminService.approveCenter(centerId);
-                    break;
-                case 2:
-                    // View All Gym Centers
-                    System.out.println("Listing all gym centers...");
-                    // e.g. AdminService.viewAllCenters();
-                    break;
-                case 3:
-                    System.out.println("Logging out...");
-                    break;
-                default:
-                    System.out.println("Invalid choice! Please try again.");
-            }
-        } while (choice != 3);
     }
 }
