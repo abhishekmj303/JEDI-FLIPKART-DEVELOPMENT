@@ -2,6 +2,8 @@ package com.flipkart.client;
 
 import java.util.Scanner;
 
+import com.flipkart.business.FlipFitUserBusiness;
+
 public class FlipFitApplication {
 
     public static void main(String[] args) {
@@ -67,26 +69,29 @@ public class FlipFitApplication {
      * Handles user login and routes to the appropriate client menu based on role.
      */
     private static void handleLogin(Scanner scanner) {
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
         
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         
         System.out.print("Enter role (gym customer, gym owner, gym admin): ");
         String role = scanner.nextLine().trim().toLowerCase();
+        
+    	FlipFitUserBusiness user = new FlipFitUserBusiness();
+        user.login(email, password, role);
 
-        // In a real application, you would validate username, password, and role.
+        // In a real application, you would validate email, password, and role.
         // Here we assume they are correct and simply delegate to the respective menu.
         switch (role) {
             case "gym owner":
-                GymOwnerClient.showGymOwnerMenu(scanner, username);
+                FlipFitGymOwnerClient.showGymOwnerMenu(scanner, email);
                 break;
             case "gym customer":
-                CustomerClient.showGymCustomerMenu(scanner, username);
+                FlipFitGymCustomerClient.showGymCustomerMenu(scanner, email);
                 break;
             case "gym admin":
-                AdminClient.showGymAdminMenu(scanner, username);
+                FlipFitGymAdminClient.showGymAdminMenu(scanner, email);
                 break;
             default:
                 System.out.println("Invalid role! Returning to main menu.");
@@ -108,7 +113,8 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        // TODO: Call your service layer to register the customer.
+        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        user.addUser(name, email, password, "gym customer");
         
         System.out.println("Gym Customer registered successfully!");
     }
@@ -127,7 +133,8 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        // TODO: Call your service layer to register the owner.
+        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        user.addUser(name, email, password, "gym owner");
         
         System.out.println("Gym Owner registered successfully!");
     }
@@ -137,8 +144,8 @@ public class FlipFitApplication {
      */
     private static void changePassword(Scanner scanner) {
         System.out.println("===== Change Password =====");
-        System.out.print("Enter your username: ");
-        String username = scanner.nextLine();
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine();
         
         System.out.print("Enter old password: ");
         String oldPassword = scanner.nextLine();
@@ -146,7 +153,8 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        // TODO: Validate and update password via your service layer.
+        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        user.updatePassword(email, newPassword);
         
         System.out.println("Password changed successfully!");
     }
