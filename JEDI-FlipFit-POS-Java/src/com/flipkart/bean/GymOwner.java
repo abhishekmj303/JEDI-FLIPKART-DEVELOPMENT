@@ -5,7 +5,5 @@ public class GymOwner extends User {
         super(id, name, email, password, "GYM_OWNER");
     }
 
-    public void addCenterAndSlot() {
-        System.out.println("Adding a gym center and slots...");
-    }
+   
 }
