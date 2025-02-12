@@ -1,5 +1,4 @@
 package com.flipkart.business;
-import com.flipkart.bean.Payment;
 
 public class PaymentBusiness {
 	
