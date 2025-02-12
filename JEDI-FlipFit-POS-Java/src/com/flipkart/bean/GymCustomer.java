@@ -11,6 +11,10 @@ public class GymCustomer extends User {
     public String getPreferredCity() { return preferredCity; }
     public void setPreferredCity(String preferredCity) { this.preferredCity = preferredCity; }
 
-    public void bookSlot() { System.out.println("Booking a slot..."); }
-    public void cancelBooking() { System.out.println("Canceling booking..."); }
+    public void bookSlot() {
+    	System.out.println("Booking a slot..."); 
+    }
+    public void cancelBooking() {
+    	System.out.println("Canceling booking...");
+    }
 }
