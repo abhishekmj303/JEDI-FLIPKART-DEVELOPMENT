@@ -3,7 +3,77 @@ package com.flipkart.bean;
 import java.time.LocalDateTime;
 
 public class Notification {
-    private int id;
+    /**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the userId
+	 */
+	public int getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * @return the dateTime
+	 */
+	public LocalDateTime getDateTime() {
+		return dateTime;
+	}
+
+	/**
+	 * @param dateTime the dateTime to set
+	 */
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	/**
+	 * @return the isRead
+	 */
+	public boolean isRead() {
+		return isRead;
+	}
+
+	/**
+	 * @param isRead the isRead to set
+	 */
+	public void setRead(boolean isRead) {
+		this.isRead = isRead;
+	}
+
+	private int id;
     private int userId;
     private String message;
     private LocalDateTime dateTime;
@@ -16,12 +86,4 @@ public class Notification {
         this.dateTime = dateTime;
         this.isRead = isRead;
     }
-
-    public int getId() { return id; }
-    public int getUserId() { return userId; }
-    public String getMessage() { return message; }
-    public LocalDateTime getDateTime() { return dateTime; }
-    public boolean isRead() { return isRead; }
-
-    public void markAsRead() { this.isRead = true; }
 }
