@@ -13,6 +13,7 @@ public class FlipFitGymCustomerBusiness extends FlipFitUserBusiness {
 	}
 	
     public void bookSlot(String email, int slotId) {
+    	viewAvailableSlots(101);
         System.out.println("Customer " + email + " booked slot " + slotId);
         System.out.println("Proceeding to payment...");
         processPayment(101,1000);
@@ -28,6 +29,10 @@ public class FlipFitGymCustomerBusiness extends FlipFitUserBusiness {
         refundPayment(101);
         sendNotification(101, "Booking cancelled");
         return true;
+    }
+    
+    public void listAllCentersByCity(String city) {
+    	System.out.println("Listing all gym centers for city "+ city);
     }
     
     public void viewAvailableSlots(int gymCenterId) {

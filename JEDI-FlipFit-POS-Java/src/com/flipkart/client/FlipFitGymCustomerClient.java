@@ -7,6 +7,7 @@ import com.flipkart.business.FlipFitGymCustomerBusiness;
 public class FlipFitGymCustomerClient {
     public static void showGymCustomerMenu(Scanner scanner, String email) {
         int choice;
+        String city = null;
         FlipFitGymCustomerBusiness gymcustomer = new FlipFitGymCustomerBusiness();
         do {
             System.out.println("\n===== Gym Customer Menu =====");
@@ -22,10 +23,11 @@ public class FlipFitGymCustomerClient {
             switch (choice) {
                 case 1:
                     System.out.print("Enter city: ");
-                    String city = scanner.nextLine();
+                    city = scanner.nextLine();
                     gymcustomer.setPreferredCity(email, city);
                     break;
                 case 2:
+                	gymcustomer.listAllCentersByCity(city);
                     System.out.println("Booking a slot...");
                     gymcustomer.bookSlot(email, 101);
                     break;
