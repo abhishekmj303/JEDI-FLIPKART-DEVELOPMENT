@@ -1,9 +1,13 @@
 package com.flipkart.client;
-
-import java.util.Scanner;
+import com.flipkart.bean.GymOwner;
+import com.flipkart.business.GymOwnerBusiness;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class FlipFitApplication {
-
+    private static GymOwnerBusiness gymOwnerBusiness = new GymOwnerBusiness();
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int mainChoice;
@@ -118,20 +122,46 @@ public class FlipFitApplication {
      */
     private static void registerGymOwner(Scanner scanner) {
         System.out.println("===== Register Gym Owner =====");
+
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
-        
+
         System.out.print("Enter email: ");
         String email = scanner.nextLine();
-        
+
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        // TODO: Call your service layer to register the owner.
-        
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        System.out.print("Enter your gym morning start time (HH:mm): ");
+        Date morningStartTime = parseTime(scanner, timeFormat);
+
+        System.out.print("Enter your gym morning end time (HH:mm): ");
+        Date morningEndTime = parseTime(scanner, timeFormat);
+
+        System.out.print("Enter your gym evening start time (HH:mm): ");
+        Date eveningStartTime = parseTime(scanner, timeFormat);
+
+        System.out.print("Enter your gym evening end time (HH:mm): ");
+        Date eveningEndTime = parseTime(scanner, timeFormat);
+
+        GymOwner gymOwner = new GymOwner(1, name, email, password, 
+                                         morningStartTime, morningEndTime, 
+                                         eveningStartTime, eveningEndTime);
+        gymOwnerBusiness.registerGymOwner(gymOwner);                                 
         System.out.println("Gym Owner registered successfully!");
     }
-
+    private static Date parseTime(Scanner scanner, SimpleDateFormat timeFormat) {
+        while (true) {
+            try {
+                String input = scanner.nextLine();
+                return timeFormat.parse(input);
+            } catch (ParseException e) {
+                System.out.print("❌ Invalid time format! Please enter in HH:mm format: ");
+            }
+        }
+    }
     /**
      * Allows user to change their password.
      */
