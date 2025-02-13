@@ -4,11 +4,14 @@ import java.util.Scanner;
 
 import com.flipkart.business.FlipFitGymAdminBusiness;
 import com.flipkart.business.FlipFitGymAdminInterface;
+import com.flipkart.business.FlipFitUserBusiness;
+import com.flipkart.business.FlipFitUserInterface;
 
 public class FlipFitGymAdminClient {
     public static void showGymAdminMenu(Scanner scanner, String email) {
         int choice;
         FlipFitGymAdminInterface admin = new FlipFitGymAdminBusiness();
+        FlipFitUserInterface user = new FlipFitUserBusiness();
         do {
             System.out.println("\n===== Gym Admin Menu =====");
             System.out.println("1. Approve a Gym Owner");
@@ -30,10 +33,10 @@ public class FlipFitGymAdminClient {
                 	admin.listAllGymCentres();
                     break;
                 case 4:
-                	admin.updateUser(email);
+                	user.updateUser(email);
                 	break;
                 case 5:
-                    admin.logout(email);
+                    user.logout(email);
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
