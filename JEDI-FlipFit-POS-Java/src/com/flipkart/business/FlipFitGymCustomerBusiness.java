@@ -6,7 +6,7 @@ package com.flipkart.business;
 /**
  * 
  */
-public class FlipFitGymCustomerBusiness extends FlipFitUserBusiness {
+public class FlipFitGymCustomerBusiness extends FlipFitUserBusiness implements FlipFitGymCustomerInterface {
 	
 	public void setPreferredCity(String email, String city) {
 		System.out.println("Set city as " + city);
