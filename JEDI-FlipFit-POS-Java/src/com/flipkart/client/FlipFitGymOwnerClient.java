@@ -3,11 +3,12 @@ package com.flipkart.client;
 import java.util.Scanner;
 
 import com.flipkart.business.FlipFitGymOwnerBusiness;
+import com.flipkart.business.FlipFitGymOwnerInterface;
 
 public class FlipFitGymOwnerClient {
     public static void showGymOwnerMenu(Scanner scanner, String email) {
         int choice;
-        FlipFitGymOwnerBusiness gymowner = new FlipFitGymOwnerBusiness();
+        FlipFitGymOwnerInterface gymowner = new FlipFitGymOwnerBusiness();
         do {
             System.out.println("\n===== Gym Owner Menu =====");
             System.out.println("1. Add Gym Center");
