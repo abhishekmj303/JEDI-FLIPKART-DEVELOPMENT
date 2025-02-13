@@ -11,13 +11,18 @@ import com.flipkart.bean.FlipFitUser;
  */
 public class FlipFitUserBusiness implements FlipFitUserInterface {
 	private HashMap<Integer, FlipFitUser> users;
-	private int userId;
+	private int userId; // keep count of userId generated
 	
+	// Pass and use any of the bean class required.
+	// Here I have given example using "Users", 
+	// If you need other bean classes include it in the constructor as well
 	public FlipFitUserBusiness(HashMap<Integer, FlipFitUser> users) {
 		this.users = users;
 		this.userId = 1;
 	}
 	
+	// This is the example method for adding user.
+	// Creates a FlipFitUser, adds it into users hashmap and returns userId
 	public int addUser(String name, String email, String password, int roleId) {
         System.out.println("User added " + email);
         this.users.put(userId, new FlipFitUser(userId, name, email, password, roleId));

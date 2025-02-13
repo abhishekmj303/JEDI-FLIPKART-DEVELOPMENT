@@ -103,13 +103,13 @@ public class FlipFitApplication {
         // Here we assume they are correct and simply delegate to the respective menu.
         switch (role) {
             case "gym owner":
-                FlipFitGymOwnerClient.showGymOwnerMenu(scanner, email);
+                FlipFitGymOwnerClient.showGymOwnerMenu(scanner, gymOwnerBusiness, userBusiness, email);
                 break;
             case "gym customer":
-                FlipFitGymCustomerClient.showGymCustomerMenu(scanner, email);
+                FlipFitGymCustomerClient.showGymCustomerMenu(scanner, gymCustomerBusiness, userBusiness, email);
                 break;
             case "gym admin":
-                FlipFitGymAdminClient.showGymAdminMenu(scanner, email);
+                FlipFitGymAdminClient.showGymAdminMenu(scanner, adminBusiness, userBusiness, email);
                 break;
             default:
                 System.out.println("Invalid role! Returning to main menu.");
