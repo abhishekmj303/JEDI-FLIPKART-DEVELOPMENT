@@ -1,7 +1,7 @@
 
 package com.flipkart.business;
 
-public class FlipFitGymOwnerInterface {
+public interface FlipFitGymOwnerInterface {
     
     public void addCenterAndSlot(String email);
 
