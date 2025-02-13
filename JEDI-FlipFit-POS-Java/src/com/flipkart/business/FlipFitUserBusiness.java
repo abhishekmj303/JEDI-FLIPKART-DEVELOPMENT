@@ -3,13 +3,25 @@
  */
 package com.flipkart.business;
 
+import java.util.HashMap;
+import com.flipkart.bean.FlipFitUser;
+
 /**
  * 
  */
 public class FlipFitUserBusiness implements FlipFitUserInterface {
+	private HashMap<Integer, FlipFitUser> users;
+	private int userId;
 	
-	public void addUser(String name, String email, String password, String role) {
+	public FlipFitUserBusiness(HashMap<Integer, FlipFitUser> users) {
+		this.users = users;
+		this.userId = 1;
+	}
+	
+	public int addUser(String name, String email, String password, int roleId) {
         System.out.println("User added " + email);
+        this.users.put(userId, new FlipFitUser(userId, name, email, password, roleId));
+        return userId++;
     }
     
     public boolean updateUser(String email) {

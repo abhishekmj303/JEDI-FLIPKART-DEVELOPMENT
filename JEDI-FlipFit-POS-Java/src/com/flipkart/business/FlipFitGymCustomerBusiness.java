@@ -8,6 +8,10 @@ package com.flipkart.business;
  */
 public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
 	
+	public void addGymCustomer(int userId) {
+		System.out.println("Added Gym Customer " + userId);
+	}
+	
 	public void setPreferredCity(String email, String city) {
 		System.out.println("Set city as " + city);
 	}

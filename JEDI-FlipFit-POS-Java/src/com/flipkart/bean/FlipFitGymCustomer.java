@@ -1,6 +1,6 @@
 package com.flipkart.bean;
 
-public class FlipFitGymCustomer extends FlipFitUser {
+public class FlipFitGymCustomer {
     /**
 	 * @return the preferredCity
 	 */
@@ -15,10 +15,24 @@ public class FlipFitGymCustomer extends FlipFitUser {
 		this.preferredCity = preferredCity;
 	}
 
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	private int id;
 	private String preferredCity;
 
-    public FlipFitGymCustomer(int id, String name, String email, String password, String preferredCity) {
-        super(id, name, email, password, "CUSTOMER");
-        this.preferredCity = preferredCity;
+    public FlipFitGymCustomer(int id) {
+        this.id = id;
     }
 }

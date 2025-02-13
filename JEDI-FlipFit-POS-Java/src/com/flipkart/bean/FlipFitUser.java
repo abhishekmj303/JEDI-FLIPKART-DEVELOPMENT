@@ -57,31 +57,31 @@ public class FlipFitUser {
 		this.password = password;
 	}
 
-	/**
-	 * @return the role
+    /**
+	 * @return the roleId
 	 */
-	public String getRole() {
-		return role;
+	public int getRoleId() {
+		return roleId;
 	}
 
 	/**
-	 * @param role the role to set
+	 * @param roleId the roleId to set
 	 */
-	public void setRole(String role) {
-		this.role = role;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 
 	private int id;
     private String name;
     private String email;
     private String password;
-    private String role;
+    private int roleId;
 
-    public FlipFitUser(int id, String name, String email, String password, String role) {
+	public FlipFitUser(int id, String name, String email, String password, int roleId) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roleId = roleId;
     }
 }
