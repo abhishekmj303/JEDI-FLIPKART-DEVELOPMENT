@@ -1,5 +1,5 @@
 package com.flipkart.client;
-
+import com.flipkart.business.*;
 import java.util.Scanner;
 
 import com.flipkart.business.FlipFitGymCustomerBusiness;
@@ -8,7 +8,8 @@ public class FlipFitGymCustomerClient {
     public static void showGymCustomerMenu(Scanner scanner, String email) {
         int choice;
         String city = null;
-        FlipFitGymCustomerBusiness gymcustomer = new FlipFitGymCustomerBusiness();
+        FlipFitGymCustomerInterface gymcustomer = new FlipFitGymCustomerBusiness();
+        FlipFitUserBusiness gymuser = new FlipFitUserBusiness();
         do {
             System.out.println("\n===== Gym Customer Menu =====");
             System.out.println("1. Select a City for Gym Centres");
@@ -38,10 +39,10 @@ public class FlipFitGymCustomerClient {
                 	gymcustomer.cancelBooking(103);
                 	break;
                 case 5:
-                    gymcustomer.updateUser(email);
+                    gymuser.updateUser(email);
                     break;
                 case 6:
-                    gymcustomer.logout(email);
+                    gymuser.logout(email);
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
