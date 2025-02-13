@@ -10,24 +10,28 @@ public class FlipFitGymAdminClient {
         FlipFitGymAdminBusiness admin = new FlipFitGymAdminBusiness();
         do {
             System.out.println("\n===== Gym Admin Menu =====");
-            System.out.println("1. Approve Gym Centers");
-            System.out.println("2. View All Gym Centers");
-            System.out.println("3. Edit Profile");
-            System.out.println("4. Logout");
+            System.out.println("1. Approve a Gym Owner");
+            System.out.println("2. Approve a Gym Center");
+            System.out.println("3. View All Gym Centers");
+            System.out.println("4. Edit Profile");
+            System.out.println("5. Logout");
             System.out.print("Enter your choice: ");
             choice = Integer.parseInt(scanner.nextLine());
             
             switch (choice) {
-                case 1:
+            	case 1:
+            		admin.approveGymOwner(201);
+            		break;
+                case 2:
                     admin.approveGymCentre(101);
                     break;
-                case 2:
+                case 3:
                 	admin.listAllGymCentres();
                     break;
-                case 3:
+                case 4:
                 	admin.updateUser(email);
                 	break;
-                case 4:
+                case 5:
                     admin.logout(email);
                     break;
                 default:

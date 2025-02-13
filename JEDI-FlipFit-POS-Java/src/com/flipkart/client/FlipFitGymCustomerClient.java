@@ -11,7 +11,7 @@ public class FlipFitGymCustomerClient {
         FlipFitGymCustomerBusiness gymcustomer = new FlipFitGymCustomerBusiness();
         do {
             System.out.println("\n===== Gym Customer Menu =====");
-            System.out.println("1. Select City");
+            System.out.println("1. Select a City for Gym Centres");
             System.out.println("2. Book a Slot");
             System.out.println("3. View Booked Slots");
             System.out.println("4. Cancel Booked Slots");
