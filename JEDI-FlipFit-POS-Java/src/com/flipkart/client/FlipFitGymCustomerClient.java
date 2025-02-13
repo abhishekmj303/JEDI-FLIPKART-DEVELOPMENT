@@ -9,7 +9,7 @@ public class FlipFitGymCustomerClient {
         int choice;
         String city = null;
         FlipFitGymCustomerInterface gymcustomer = new FlipFitGymCustomerBusiness();
-        FlipFitUserBusiness gymuser = new FlipFitUserBusiness();
+        FlipFitUserInterface gymuser = new FlipFitUserBusiness();
         do {
             System.out.println("\n===== Gym Customer Menu =====");
             System.out.println("1. Select a City for Gym Centres");

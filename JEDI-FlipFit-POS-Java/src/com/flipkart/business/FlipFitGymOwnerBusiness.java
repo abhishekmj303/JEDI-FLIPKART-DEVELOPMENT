@@ -7,7 +7,7 @@ package com.flipkart.business;
  * 
  */
 
-public class FlipFitGymOwnerBusiness extends FlipFitUserBusiness implements FlipFitGymOwnerInterface {
+public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
 
 
      public void addCenterAndSlot(String email) {
