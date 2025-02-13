@@ -6,7 +6,7 @@ package com.flipkart.business;
 /**
  * 
  */
-public interface FlipFitUserBusinessInterface {
+public interface FlipFitUserInterface {
 	public void addUser(String name, String email, String password, String role);
 	
 	public boolean updateUser(String email);
