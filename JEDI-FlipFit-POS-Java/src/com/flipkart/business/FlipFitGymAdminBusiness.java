@@ -5,7 +5,7 @@ package com.flipkart.business;
 /**
  * 
  */
-public class FlipFitGymAdminBusiness extends FlipFitUserBusiness {
+public class FlipFitGymAdminBusiness extends FlipFitUserBusiness implements FlipFitGymAdminInterface {
 	
 	public void approveGymOwner(int userId) {
 		System.out.println("Gym owner approved with ID: " + userId);

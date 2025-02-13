@@ -3,11 +3,12 @@ package com.flipkart.client;
 import java.util.Scanner;
 
 import com.flipkart.business.FlipFitGymAdminBusiness;
+import com.flipkart.business.FlipFitGymAdminInterface;
 
 public class FlipFitGymAdminClient {
     public static void showGymAdminMenu(Scanner scanner, String email) {
         int choice;
-        FlipFitGymAdminBusiness admin = new FlipFitGymAdminBusiness();
+        FlipFitGymAdminInterface admin = new FlipFitGymAdminBusiness();
         do {
             System.out.println("\n===== Gym Admin Menu =====");
             System.out.println("1. Approve a Gym Owner");
