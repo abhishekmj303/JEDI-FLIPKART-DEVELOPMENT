@@ -6,7 +6,7 @@ package com.flipkart.business;
 /**
  * 
  */
-public class FlipFitUserBusiness {
+public class FlipFitUserBusiness implements FlipFitUserBusinessInterface {
 	
 	public void addUser(String name, String email, String password, String role) {
         System.out.println("User added " + email);

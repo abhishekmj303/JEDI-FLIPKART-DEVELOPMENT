@@ -3,6 +3,7 @@ package com.flipkart.client;
 import java.util.Scanner;
 
 import com.flipkart.business.FlipFitUserBusiness;
+import com.flipkart.business.FlipFitUserBusinessInterface;
 
 public class FlipFitApplication {
 
@@ -78,7 +79,7 @@ public class FlipFitApplication {
         System.out.print("Enter role (gym customer, gym owner, gym admin): ");
         String role = scanner.nextLine().trim().toLowerCase();
         
-    	FlipFitUserBusiness user = new FlipFitUserBusiness();
+    	FlipFitUserBusinessInterface user = new FlipFitUserBusiness();
         user.login(email, password, role);
 
         // In a real application, you would validate email, password, and role.
@@ -113,7 +114,7 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        FlipFitUserBusinessInterface user = new FlipFitUserBusiness();
         user.addUser(name, email, password, "gym customer");
         
         System.out.println("Gym Customer registered successfully!");
@@ -133,7 +134,7 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        FlipFitUserBusinessInterface user = new FlipFitUserBusiness();
         user.addUser(name, email, password, "gym owner");
         
         System.out.println("Gym Owner registered successfully!");
@@ -153,7 +154,7 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        FlipFitUserBusiness user = new FlipFitUserBusiness();
+        FlipFitUserBusinessInterface user = new FlipFitUserBusiness();
         user.updatePassword(email, newPassword);
         
         System.out.println("Password changed successfully!");
