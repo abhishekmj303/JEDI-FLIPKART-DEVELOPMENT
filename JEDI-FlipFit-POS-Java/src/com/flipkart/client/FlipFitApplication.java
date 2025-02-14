@@ -193,7 +193,7 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        userBusiness.updatePassword(email, newPassword);
+        userBusiness.updatePassword(email, oldPassword, newPassword);
         
         System.out.println("Password changed successfully!");
     }
