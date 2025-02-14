@@ -25,25 +25,8 @@ import com.flipkart.business.FlipFitUserInterface;
 public class FlipFitApplication {
 
     public static void main(String[] args) {
-    	// Initialize all the tables here in the main function 
-    	HashMap<Integer, FlipFitUser> users = new HashMap<Integer, FlipFitUser>();
-    	HashMap<Integer, FlipFitGymAdmin> admins = new HashMap<Integer, FlipFitGymAdmin>();
-    	HashMap<Integer, FlipFitGymCustomer> gymCustomers = new HashMap<Integer, FlipFitGymCustomer>();
-    	HashMap<Integer, FlipFitGymOwner> gymOwners = new HashMap<Integer, FlipFitGymOwner>();
-    	HashMap<Integer, FlipFitGymCenter> gymCenters = new HashMap<Integer, FlipFitGymCenter>();
-    	HashMap<Integer, FlipFitSlot> slots = new HashMap<Integer, FlipFitSlot>();
-    	HashMap<Integer, FlipFitSlotBooking> slotBookings = new HashMap<Integer, FlipFitSlotBooking>();
-    	HashMap<Integer, FlipFitNotification> notifications = new HashMap<Integer, FlipFitNotification>();
-    	HashMap<Integer, FlipFitPayment> payments = new HashMap<Integer, FlipFitPayment>();
-    	HashMap<Integer, FlipFitRole> roles = new HashMap<Integer, FlipFitRole>();
-    	
-    	roles.put(1, new FlipFitRole(1, "Admin"));
-    	roles.put(2, new FlipFitRole(2, "GymOwner"));
-    	roles.put(3, new FlipFitRole(3, "GymCustomer"));
-    	
-    	
     	// Initialize all the business by passing the required tables declared above
-    	FlipFitUserInterface userBusiness = new FlipFitUserBusiness(users);
+    	FlipFitUserInterface userBusiness = new FlipFitUserBusiness();
     	FlipFitGymAdminInterface adminBusiness = new FlipFitGymAdminBusiness();
     	FlipFitGymCustomerInterface gymCustomerBusiness = new FlipFitGymCustomerBusiness();
     	FlipFitGymOwnerInterface gymOwnerBusiness = new FlipFitGymOwnerBusiness();
