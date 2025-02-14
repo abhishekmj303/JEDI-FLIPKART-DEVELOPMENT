@@ -12,11 +12,6 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
     private int userId; 
 
 
-    public FlipFitUserBusiness() {
-        this.users = new HashMap<>();
-        this.userId = 1;
-    }
-
     public int addUser(String name, String email, String password, int roleId) {
         FlipFitUser newUser = new FlipFitUser(userId, name, email, password, roleId);
         users.put(userId, newUser);
