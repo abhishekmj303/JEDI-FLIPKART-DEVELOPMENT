@@ -6,6 +6,6 @@ package com.flipkart.dao;
 /**
  * 
  */
-public class FlipFitGymAdminDaoImpl {
+public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
 }
