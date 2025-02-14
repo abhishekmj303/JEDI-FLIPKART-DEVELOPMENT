@@ -1,13 +1,31 @@
 package com.flipkart.client;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
+import com.flipkart.bean.FlipFitUser;
+import com.flipkart.business.FlipFitGymAdminBusiness;
+import com.flipkart.business.FlipFitGymAdminInterface;
+import com.flipkart.business.FlipFitGymCustomerBusiness;
+import com.flipkart.business.FlipFitGymCustomerInterface;
+import com.flipkart.business.FlipFitGymOwnerBusiness;
+import com.flipkart.business.FlipFitGymOwnerInterface;
 import com.flipkart.business.FlipFitUserBusiness;
 import com.flipkart.business.FlipFitUserInterface;
 
 public class FlipFitApplication {
 
     public static void main(String[] args) {
+    	// Initialize all the tables here in the main function 
+    	HashMap<Integer, FlipFitUser> users = new HashMap<Integer, FlipFitUser>();
+    	
+    	
+    	// Initialize all the business by passing the required tables declared above
+    	FlipFitUserInterface userBusiness = new FlipFitUserBusiness(users);
+    	FlipFitGymAdminInterface adminBusiness = new FlipFitGymAdminBusiness();
+    	FlipFitGymCustomerInterface gymCustomerBusiness = new FlipFitGymCustomerBusiness();
+    	FlipFitGymOwnerInterface gymOwnerBusiness = new FlipFitGymOwnerBusiness();
+    	
         Scanner scanner = new Scanner(System.in);
         int mainChoice;
         
@@ -18,22 +36,22 @@ public class FlipFitApplication {
             switch (mainChoice) {
                 case 1:
                     // Login: delegate to the respective client based on role.
-                    handleLogin(scanner);
+                    handleLogin(scanner, userBusiness, adminBusiness, gymCustomerBusiness, gymOwnerBusiness);
                     break;
                 
                 case 2:
                     // Registration for gym customer
-                    registerGymCustomer(scanner);
+                    registerGymCustomer(scanner, userBusiness, gymCustomerBusiness);
                     break;
                 
                 case 3:
                     // Registration for gym owner
-                    registerGymOwner(scanner);
+                    registerGymOwner(scanner, userBusiness, gymOwnerBusiness);
                     break;
                 
                 case 4:
                     // Change password
-                    changePassword(scanner);
+                    changePassword(scanner, userBusiness);
                     break;
                 
                 case 5:
@@ -69,7 +87,7 @@ public class FlipFitApplication {
     /**
      * Handles user login and routes to the appropriate client menu based on role.
      */
-    private static void handleLogin(Scanner scanner) {
+    private static void handleLogin(Scanner scanner, FlipFitUserInterface userBusiness, FlipFitGymAdminInterface adminBusiness, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitGymOwnerInterface gymOwnerBusiness) {
         System.out.print("Enter email: ");
         String email = scanner.nextLine();
         
@@ -79,20 +97,19 @@ public class FlipFitApplication {
         System.out.print("Enter role (gym customer, gym owner, gym admin): ");
         String role = scanner.nextLine().trim().toLowerCase();
         
-    	FlipFitUserInterface user = new FlipFitUserBusiness();
-        user.login(email, password, role);
+        userBusiness.login(email, password, role);
 
         // In a real application, you would validate email, password, and role.
         // Here we assume they are correct and simply delegate to the respective menu.
         switch (role) {
             case "gym owner":
-                FlipFitGymOwnerClient.showGymOwnerMenu(scanner, email);
+                FlipFitGymOwnerClient.showGymOwnerMenu(scanner, gymOwnerBusiness, userBusiness, email);
                 break;
             case "gym customer":
-                FlipFitGymCustomerClient.showGymCustomerMenu(scanner, email);
+                FlipFitGymCustomerClient.showGymCustomerMenu(scanner, gymCustomerBusiness, userBusiness, email);
                 break;
             case "gym admin":
-                FlipFitGymAdminClient.showGymAdminMenu(scanner, email);
+                FlipFitGymAdminClient.showGymAdminMenu(scanner, adminBusiness, userBusiness, email);
                 break;
             default:
                 System.out.println("Invalid role! Returning to main menu.");
@@ -103,7 +120,7 @@ public class FlipFitApplication {
     /**
      * Registration for gym customer.
      */
-    private static void registerGymCustomer(Scanner scanner) {
+    private static void registerGymCustomer(Scanner scanner, FlipFitUserInterface userBusiness, FlipFitGymCustomerInterface gymCustomerBusiness) {
         System.out.println("===== Register Gym Customer =====");
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
@@ -114,8 +131,8 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        FlipFitUserInterface user = new FlipFitUserBusiness();
-        user.addUser(name, email, password, "gym customer");
+        int userId = userBusiness.addUser(name, email, password, 3);
+        gymCustomerBusiness.addGymCustomer(userId);
         
         System.out.println("Gym Customer registered successfully!");
     }
@@ -123,7 +140,7 @@ public class FlipFitApplication {
     /**
      * Registration for gym owner.
      */
-    private static void registerGymOwner(Scanner scanner) {
+    private static void registerGymOwner(Scanner scanner, FlipFitUserInterface userBusiness, FlipFitGymOwnerInterface gymOwnerBusiness) {
         System.out.println("===== Register Gym Owner =====");
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
@@ -134,8 +151,8 @@ public class FlipFitApplication {
         System.out.print("Enter desired password: ");
         String password = scanner.nextLine();
 
-        FlipFitUserInterface user = new FlipFitUserBusiness();
-        user.addUser(name, email, password, "gym owner");
+        int userId = userBusiness.addUser(name, email, password, 2);
+        gymOwnerBusiness.addGymOwner(userId, "1234567812345678", "CKOE1234M", "9876543210");
         
         System.out.println("Gym Owner registered successfully!");
     }
@@ -143,7 +160,7 @@ public class FlipFitApplication {
     /**
      * Allows user to change their password.
      */
-    private static void changePassword(Scanner scanner) {
+    private static void changePassword(Scanner scanner, FlipFitUserInterface userBusiness) {
         System.out.println("===== Change Password =====");
         System.out.print("Enter your email: ");
         String email = scanner.nextLine();
@@ -154,8 +171,7 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        FlipFitUserInterface user = new FlipFitUserBusiness();
-        user.updatePassword(email, newPassword);
+        userBusiness.updatePassword(email, newPassword);
         
         System.out.println("Password changed successfully!");
     }

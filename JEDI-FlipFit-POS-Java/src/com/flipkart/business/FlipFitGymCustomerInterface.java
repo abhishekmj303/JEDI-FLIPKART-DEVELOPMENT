@@ -7,6 +7,7 @@ package com.flipkart.business;
  * 
  */
 public interface FlipFitGymCustomerInterface {
+	public void addGymCustomer(int userId);
 	public void setPreferredCity(String email, String city);
 	public void bookSlot(String email, int slotId);
 	public boolean cancelBooking(int bookingId);

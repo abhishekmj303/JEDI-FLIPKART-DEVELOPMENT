@@ -1,15 +1,13 @@
 package com.flipkart.client;
-import com.flipkart.business.*;
 import java.util.Scanner;
 
-import com.flipkart.business.FlipFitGymCustomerBusiness;
+import com.flipkart.business.FlipFitGymCustomerInterface;
+import com.flipkart.business.FlipFitUserInterface;
 
 public class FlipFitGymCustomerClient {
-    public static void showGymCustomerMenu(Scanner scanner, String email) {
+    public static void showGymCustomerMenu(Scanner scanner, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitUserInterface userBusiness, String email) {
         int choice;
         String city = null;
-        FlipFitGymCustomerInterface gymcustomer = new FlipFitGymCustomerBusiness();
-        FlipFitUserBusiness gymuser = new FlipFitUserBusiness();
         do {
             System.out.println("\n===== Gym Customer Menu =====");
             System.out.println("1. Select a City for Gym Centres");
@@ -25,24 +23,24 @@ public class FlipFitGymCustomerClient {
                 case 1:
                     System.out.print("Enter city: ");
                     city = scanner.nextLine();
-                    gymcustomer.setPreferredCity(email, city);
+                    gymCustomerBusiness.setPreferredCity(email, city);
                     break;
                 case 2:
-                	gymcustomer.listAllCentersByCity(city);
+                	gymCustomerBusiness.listAllCentersByCity(city);
                     System.out.println("Booking a slot...");
-                    gymcustomer.bookSlot(email, 101);
+                    gymCustomerBusiness.bookSlot(email, 101);
                     break;
                 case 3:
-                    gymcustomer.viewBookedSlots(email);
+                	gymCustomerBusiness.viewBookedSlots(email);
                     break;
                 case 4:
-                	gymcustomer.cancelBooking(103);
+                	gymCustomerBusiness.cancelBooking(103);
                 	break;
                 case 5:
-                    gymuser.updateUser(email);
+                    userBusiness.updateUser(email);
                     break;
                 case 6:
-                    gymuser.logout(email);
+                    userBusiness.logout(email);
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");

@@ -2,7 +2,7 @@ package com.flipkart.bean;
 
 import java.time.LocalDateTime;
 
-public class FlipFitBooking {
+public class FlipFitSlotBooking {
     private int id;
     /**
 	 * @return the id
@@ -64,7 +64,7 @@ public class FlipFitBooking {
     private int customerId;
     private LocalDateTime dateTime;
 
-    public FlipFitBooking(int id, int slotId, int customerId, LocalDateTime dateTime) {
+    public FlipFitSlotBooking(int id, int slotId, int customerId, LocalDateTime dateTime) {
         this.id = id;
         this.slotId = slotId;
         this.customerId = customerId;
