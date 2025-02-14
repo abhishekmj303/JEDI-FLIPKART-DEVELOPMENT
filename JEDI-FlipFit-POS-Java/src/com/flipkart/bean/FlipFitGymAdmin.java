@@ -7,17 +7,16 @@ public class FlipFitGymAdmin {
 	public int getId() {
 		return id;
 	}
-
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
 	private int id;
 	
-	public FlipFitGymAdmin(int id) {
-		this.id = id;
-	}
+    public FlipFitGymAdmin(int id) {
+    	this.id = id;
+    }
 }

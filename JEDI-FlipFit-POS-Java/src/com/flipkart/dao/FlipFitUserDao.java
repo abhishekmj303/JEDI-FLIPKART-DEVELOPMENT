@@ -6,6 +6,6 @@ package com.flipkart.dao;
 /**
  * 
  */
-public class GymOwnerDAO {
+public interface FlipFitUserDao {
 
 }

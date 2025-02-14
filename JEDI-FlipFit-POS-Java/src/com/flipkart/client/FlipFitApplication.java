@@ -3,6 +3,15 @@ package com.flipkart.client;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import com.flipkart.bean.FlipFitGymAdmin;
+import com.flipkart.bean.FlipFitGymCenter;
+import com.flipkart.bean.FlipFitGymCustomer;
+import com.flipkart.bean.FlipFitGymOwner;
+import com.flipkart.bean.FlipFitNotification;
+import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitRole;
+import com.flipkart.bean.FlipFitSlot;
+import com.flipkart.bean.FlipFitSlotBooking;
 import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymAdminBusiness;
 import com.flipkart.business.FlipFitGymAdminInterface;
@@ -16,12 +25,8 @@ import com.flipkart.business.FlipFitUserInterface;
 public class FlipFitApplication {
 
     public static void main(String[] args) {
-    	// Initialize all the tables here in the main function 
-    	HashMap<Integer, FlipFitUser> users = new HashMap<Integer, FlipFitUser>();
-    	
-    	
     	// Initialize all the business by passing the required tables declared above
-    	FlipFitUserInterface userBusiness = new FlipFitUserBusiness(users);
+    	FlipFitUserInterface userBusiness = new FlipFitUserBusiness();
     	FlipFitGymAdminInterface adminBusiness = new FlipFitGymAdminBusiness();
     	FlipFitGymCustomerInterface gymCustomerBusiness = new FlipFitGymCustomerBusiness();
     	FlipFitGymOwnerInterface gymOwnerBusiness = new FlipFitGymOwnerBusiness();
