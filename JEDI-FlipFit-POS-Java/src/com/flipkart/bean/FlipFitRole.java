@@ -33,4 +33,9 @@ public class FlipFitRole {
 		this.roleName = roleName;
 	}
 	private String roleName;
+	
+	public FlipFitRole(int id, String roleName) {
+		this.id = id;
+		this.roleName = roleName;
+	}
 }
