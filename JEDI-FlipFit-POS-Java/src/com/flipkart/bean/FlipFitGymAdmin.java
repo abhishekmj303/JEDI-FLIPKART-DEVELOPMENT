@@ -1,23 +1,7 @@
 package com.flipkart.bean;
 
-public class FlipFitGymAdmin {
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	private int id;
-	
-	public FlipFitGymAdmin(int id) {
-		this.id = id;
-	}
+public class FlipFitGymAdmin extends FlipFitUser {
+    public FlipFitGymAdmin(int id, String name, String email, String password) {
+        super(id, name, email, password, "ADMIN");
+    }
 }
