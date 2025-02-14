@@ -3,10 +3,42 @@
  */
 package com.flipkart.business;
 
+import java.util.HashMap;
+
+import com.flipkart.bean.FlipFitGymCenter;
+import com.flipkart.bean.FlipFitGymCustomer;
+import com.flipkart.bean.FlipFitNotification;
+import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitSlot;
+import com.flipkart.bean.FlipFitSlotBooking;
+
 /**
  * 
  */
 public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
+	private HashMap<Integer, FlipFitGymCustomer> gymCustomers;
+	private HashMap<Integer, FlipFitGymCenter> gymCenters;
+	private HashMap<Integer, FlipFitSlot> slots;
+	private HashMap<Integer, FlipFitSlotBooking> slotBookings;
+	private HashMap<Integer, FlipFitNotification> notifications;
+	private HashMap<Integer, FlipFitPayment> payments;
+	
+	public FlipFitGymCustomerBusiness(
+			HashMap<Integer, FlipFitGymCustomer> gymCustomers,
+			HashMap<Integer, FlipFitGymCenter> gymCenters,
+			HashMap<Integer, FlipFitSlot> slots,
+			HashMap<Integer, FlipFitSlotBooking> slotBookings,
+			HashMap<Integer, FlipFitNotification> notifications,
+			HashMap<Integer, FlipFitPayment> payments
+		) {
+		this.gymCustomers = gymCustomers;
+        this.gymCenters = gymCenters;
+        this.slots = slots;
+        this.slotBookings = slotBookings;
+        this.notifications = notifications;
+        this.payments = payments;
+	}
+	
 	
 	public void addGymCustomer(int userId) {
 		System.out.println("Added Gym Customer " + userId);
