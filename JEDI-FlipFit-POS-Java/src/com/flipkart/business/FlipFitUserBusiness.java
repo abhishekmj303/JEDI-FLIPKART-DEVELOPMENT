@@ -34,19 +34,25 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
         return false;
     }
 
-    public boolean updatePassword(String email, String password) {
+    public boolean updatePassword(String email, String oldPassword, String newPassword) {
         for (Map.Entry<Integer, FlipFitUser> entry : users.entrySet()) {
-            FlipFitUser user = entry.getValue();
+        FlipFitUser user = entry.getValue();
             if (user.getEmail().equals(email)) {
-                user.setPassword(password);
-                users.put(entry.getKey(), user); // Update HashMap
-                System.out.println("Password updated for: " + email);
-                return true;
+                if (user.getPassword().equals(oldPassword)) {
+                    user.setPassword(newPassword);
+                    users.put(entry.getKey(), user); 
+                    System.out.println("Password updated successfully for: " + email);
+                    eturn true;
+                } else {
+                    System.out.println("Incorrect old password for: " + email);
+                    return false;
+                }
             }
         }
         System.out.println("User not found: " + email);
         return false;
     }
+
 
     public void listAllUsers() {
         System.out.println("List of all users:");

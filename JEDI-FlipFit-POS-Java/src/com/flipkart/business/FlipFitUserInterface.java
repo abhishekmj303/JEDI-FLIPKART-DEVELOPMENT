@@ -8,14 +8,14 @@ package com.flipkart.business;
  */
 public interface FlipFitUserInterface {
 	public int addUser(String name, String email, String password, int roleId);
-	
-	public boolean updateUser(String email);
-	
-	public boolean updatePassword(String email, String password);
+
+    public boolean updateUser(String email, String name, int roleId) ;
+
+	public boolean updatePassword(String email, String oldPassword, String newPassword);
 
     public void listAllUsers();
 
-    public boolean login(String email, String password, String role);
+    public boolean login(String email, String password);
 
     public boolean logout(String email);
 
