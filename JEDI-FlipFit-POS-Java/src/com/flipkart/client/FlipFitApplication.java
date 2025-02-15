@@ -25,7 +25,7 @@ import com.flipkart.business.FlipFitUserInterface;
 public class FlipFitApplication {
 
     public static void main(String[] args) {
-    	// Initialize all the business by passing the required tables declared above
+   
     	FlipFitUserInterface userBusiness = new FlipFitUserBusiness();
     	FlipFitGymAdminInterface adminBusiness = new FlipFitGymAdminBusiness();
     	FlipFitGymCustomerInterface gymCustomerBusiness = new FlipFitGymCustomerBusiness();
