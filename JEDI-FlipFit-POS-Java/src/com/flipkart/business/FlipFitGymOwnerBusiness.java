@@ -80,3 +80,4 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
         return calendar.getTime();
     }
 }
+

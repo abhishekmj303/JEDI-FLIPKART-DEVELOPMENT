@@ -1,76 +1,54 @@
-/**
- * FlipFitUserBusiness - Handles user management operations.
- */
 package com.flipkart.business;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.flipkart.bean.FlipFitUser;
+import com.flipkart.dao.FlipFitUserDao;
+import com.flipkart.dao.FlipFitUserDaoImpl;
 
 public class FlipFitUserBusiness implements FlipFitUserInterface {
-    private HashMap<Integer, FlipFitUser> users;
-    private int userId; 
+    private FlipFitUserDao userDao;
 
-	public FlipFitUserBusiness(HashMap<Integer, FlipFitUser> users) {
-		this.users = users;
-		this.userId = 1;
-	}
+    public FlipFitUserBusiness() {
+        this.userDao = new FlipFitUserDaoImpl();
+    }
 
     public int addUser(String name, String email, String password, int roleId) {
-        FlipFitUser newUser = new FlipFitUser(userId, name, email, password, roleId);
-        users.put(userId, newUser);
-        System.out.println("User added: " + email + " with ID: " + userId);
-        return userId++;
+        FlipFitUser newUser = new FlipFitUser(0, name, email, password, roleId);
+        int userId = userDao.addUser(newUser);
+        if (userId != -1) {
+            System.out.println("User added: " + email + " with ID: " + userId);
+        } else {
+            System.out.println("Failed to add user: " + email);
+        }
+        return userId;
     }
 
     public boolean updateUser(String email, String name, int roleId) {
-        for (Map.Entry<Integer, FlipFitUser> entry : users.entrySet()) {
-            FlipFitUser user = entry.getValue();
-            if (user.getEmail().equals(email)) {
-                user.setName(name);
-                user.setRoleId(roleId);
-                users.put(entry.getKey(), user); // Update HashMap
-                System.out.println("User updated: " + email);
-                return true;
-            }
+        if (userDao.updateUser(email, name, roleId)) {
+            System.out.println("User updated: " + email);
+            return true;
         }
         System.out.println("User not found: " + email);
         return false;
     }
 
     public boolean updatePassword(String email, String oldPassword, String newPassword) {
-        for (Map.Entry<Integer, FlipFitUser> entry : users.entrySet()) {
-        FlipFitUser user = entry.getValue();
-            if (user.getEmail().equals(email)) {
-                if (user.getPassword().equals(oldPassword)) {
-                    user.setPassword(newPassword);
-                    users.put(entry.getKey(), user); 
-                    System.out.println("Password updated successfully for: " + email);
-                    eturn true;
-                } else {
-                    System.out.println("Incorrect old password for: " + email);
-                    return false;
-                }
-            }
+        if (userDao.updatePassword(email, oldPassword, newPassword)) {
+            System.out.println("Password updated successfully for: " + email);
+            return true;
         }
-        System.out.println("User not found: " + email);
+        System.out.println("Incorrect old password or user not found: " + email);
         return false;
     }
 
-
     public void listAllUsers() {
         System.out.println("List of all users:");
-        for (FlipFitUser user : users.values()) {
-            System.out.println(user);
-        }
+        userDao.listAllUsers();
     }
 
     public boolean login(String email, String password) {
-        for (FlipFitUser user : users.values()) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                System.out.println("User logged in: " + email);
-                return true;
-            }
+        if (userDao.login(email, password)) {
+            System.out.println("User logged in: " + email);
+            return true;
         }
         System.out.println("Invalid login credentials for: " + email);
         return false;
@@ -82,13 +60,10 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
     }
 
     public String generateToken(int userId) {
-        String token = "token_" + userId;
-        System.out.println("Generated token: " + token);
-        return token;
+        return userDao.generateToken(userId);
     }
 
     public boolean validateToken(String token) {
-        System.out.println("Validating token: " + token);
-        return token.startsWith("token_");
+        return userDao.validateToken(token);
     }
 }
