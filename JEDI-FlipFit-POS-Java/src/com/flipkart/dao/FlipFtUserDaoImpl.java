@@ -4,6 +4,7 @@
 package com.flipkart.dao;
 
 import com.flipkart.bean.FlipFitUser;
+import com.flipkart.constant.SQLConstant;
 import com.flipkart.datasource.Database;
 
 import java.sql.*;
@@ -20,8 +21,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
 
     @Override
     public int addUser(FlipFitUser user) {
-        String sql = "INSERT INTO user (id, name, email, password, roleId) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(SQLConstant.FLIPFIT_SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, user.getUserId());
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getEmail());
