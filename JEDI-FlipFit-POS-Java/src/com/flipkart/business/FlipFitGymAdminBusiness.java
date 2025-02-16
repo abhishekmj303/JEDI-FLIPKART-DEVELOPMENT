@@ -1,6 +1,7 @@
 package com.flipkart.business;
 
 import com.flipkart.dao.FlipFitGymAdminDao;
+import com.flipkart.dao.FlipFitGymAdminDaoImpl;
 
 public class FlipFitGymAdminBusiness implements FlipFitGymAdminInterface {
 
@@ -10,7 +11,7 @@ public class FlipFitGymAdminBusiness implements FlipFitGymAdminInterface {
      * Constructor to initialize the DAO instance.
      */
     public FlipFitGymAdminBusiness() {
-        this.gymAdminDAO = new FlipFitGymAdminDao();
+        this.gymAdminDAO = new FlipFitGymAdminDaoImpl();
     }
 
     /**

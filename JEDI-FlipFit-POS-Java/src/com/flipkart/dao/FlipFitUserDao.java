@@ -7,19 +7,19 @@ import com.flipkart.bean.FlipFitUser;
 
 public interface FlipFitUserDao {
 
-    int addUser(FlipFitUser user);
+    public int addUser(FlipFitUser user);
     
-    boolean updateUser(String email, String name, int roleId);
+    public boolean updateUser(String email, String name, int roleId);
     
-    boolean updatePassword(String email, String oldPassword, String newPassword);
+    public boolean updatePassword(String email, String oldPassword, String newPassword);
     
-    FlipFitUser getUserByEmail(String email);
+    public FlipFitUser getUserByEmail(String email);
     
-    void listAllUsers();
+    public void listAllUsers();
     
-    boolean login(String email, String password);
+    public FlipFitUser login(String email, String password);
     
-    String generateToken(int userId);
+    public String generateToken(int userId);
     
-    boolean validateToken(String token);
+    public boolean validateToken(String token);
 }

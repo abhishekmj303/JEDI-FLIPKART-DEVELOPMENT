@@ -1,13 +1,10 @@
 package com.flipkart.dao;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import com.flipkart.bean.FlipFitGymCustomer;
-import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
-import com.flipkart.bean.FlipFitSlot;
 import com.flipkart.bean.FlipFitSlotBooking;
 import com.flipkart.datasource.Database;
 
@@ -16,8 +13,9 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     private Connection connection;
 
     public FlipFitGymCustomerDaoImpl() {
-        // Assumes DBConnection.getConnection() returns a valid Connection.
-        connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		// Assumes DBConnection.getConnection() returns a valid Connection.
+        connection = Database.getConnection();
     };
 
     // 1. Add a Gym Customer (insert into gymCustomer table)
@@ -204,9 +202,9 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     public void sendNotification(FlipFitNotification notification) {
         String sql = "INSERT INTO notification (id, userId, message, dateTime, isRead) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, notification.getNotificationId());
+            stmt.setInt(1, notification.getId());
             stmt.setInt(2, notification.getUserId());
-            stmt.setString(3, notification.getNotificationId());
+            stmt.setString(3, notification.getMessage());
             // Use Timestamp for dateTime column
             if (notification.getDateTime() != null) {
                 stmt.setTimestamp(4, Timestamp.valueOf(notification.getDateTime()));

@@ -12,7 +12,8 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
     private int centreId;
 
     public FlipFitGymOwnerDaoImpl() {
-        this.connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		this.connection = Database.getConnection();
         this.centreId = 1;
     }
 

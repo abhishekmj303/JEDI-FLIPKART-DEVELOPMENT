@@ -48,14 +48,14 @@ public class FlipFitPayment {
 	/**
 	 * @return the amount
 	 */
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
 	/**
 	 * @param amount the amount to set
 	 */
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
@@ -104,12 +104,12 @@ public class FlipFitPayment {
 	private int id;
     private int customerId;
     private int bookingId;
-    private float amount;
+    private double amount;
     private String status;
     private String paymentMethod;
     private LocalDateTime transactionDate;
 
-    public FlipFitPayment(int id, int customerId, int bookingId, float amount, String status, String paymentMethod, LocalDateTime transactionDate) {
+    public FlipFitPayment(int id, int customerId, int bookingId, double amount, String status, String paymentMethod, LocalDateTime transactionDate) {
         this.id = id;
         this.customerId = customerId;
         this.bookingId = bookingId;

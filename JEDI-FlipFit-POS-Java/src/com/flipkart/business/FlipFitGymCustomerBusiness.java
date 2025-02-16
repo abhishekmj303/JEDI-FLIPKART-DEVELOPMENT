@@ -8,7 +8,6 @@ import com.flipkart.dao.FlipFitGymCustomerDao;
 import com.flipkart.dao.FlipFitGymCustomerDaoImpl;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     
@@ -72,7 +71,7 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
 
     // 8. Process Payment
     public void processPayment(int customerId, double amount) {
-        FlipFitPayment payment = new FlipFitPayment(101, customerId, amount, "Completed", "CreditCard", "2025-02-14");
+        FlipFitPayment payment = new FlipFitPayment(1, 101, customerId, amount, "Completed", "CreditCard", LocalDateTime.now());
         gymCustomerDao.processPayment(payment);
     }
 

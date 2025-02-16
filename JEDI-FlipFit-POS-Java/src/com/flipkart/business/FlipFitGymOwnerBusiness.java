@@ -28,7 +28,6 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
         gymOwnerDao.addGymOwnerDAO(userId, aadhaarNo, pan, phoneNo);
     }
 
-	@Override
 	public void addCenterAndSlot(String email) {
 		System.out.println("Adding a gym center and slots for " + email);
 		Scanner sc = new Scanner(System.in);
@@ -38,9 +37,10 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
 		String location = sc.nextLine();
 	
 		int ownerId = 1;
-		int centerId = gymOwnerDao.addCenterDAO(centreName,location);
+		int centerId = gymOwnerDao.addCenterDAO(101, centreName,location);
 		if (centerId == -1) {
 			System.out.println("Error: Failed to add Gym Center.");
+			sc.close();
 			return;
 		}
 	
@@ -65,7 +65,6 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
 		sc.close();
 	}
 	
-    @Override
     public void viewSlotsStatus() {
         System.out.println("Current Slot Status...");
         gymOwnerDao.viewSlotsStatusDAO();

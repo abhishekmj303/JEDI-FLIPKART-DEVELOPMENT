@@ -45,13 +45,14 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
         userDao.listAllUsers();
     }
 
-    public boolean login(String email, String password) {
-        if (userDao.login(email, password)) {
+    public FlipFitUser login(String email, String password) {
+    	FlipFitUser user = userDao.login(email, password);
+        if (user != null) {
             System.out.println("User logged in: " + email);
-            return true;
+        } else {
+        	System.out.println("Invalid login credentials for: " + email);
         }
-        System.out.println("Invalid login credentials for: " + email);
-        return false;
+        return user;
     }
 
     public boolean logout(String email) {

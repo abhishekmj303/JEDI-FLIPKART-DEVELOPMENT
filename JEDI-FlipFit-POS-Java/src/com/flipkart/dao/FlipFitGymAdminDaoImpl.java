@@ -12,7 +12,8 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
     // Constructor initializes the database connection once
     public FlipFitGymAdminDaoImpl() {
-        this.connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		this.connection = Database.getConnection();
     }
 
     @Override

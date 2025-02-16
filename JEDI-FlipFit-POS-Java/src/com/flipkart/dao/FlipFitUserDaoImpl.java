@@ -8,21 +8,19 @@ import com.flipkart.constant.SQLConstant;
 import com.flipkart.datasource.Database;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FlipFitUserDaoImpl implements FlipFitUserDao {
 
     private Connection connection;
 
     public FlipFitUserDaoImpl() {
-        this.connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		this.connection = Database.getConnection();
     }
 
-    @Override
     public int addUser(FlipFitUser user) {
         try (PreparedStatement stmt = connection.prepareStatement(SQLConstant.FLIPFIT_SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, user.getUserId());
+            stmt.setInt(1, user.getId());
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPassword());
@@ -41,7 +39,6 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         return -1;
     }
 
-    @Override
     public boolean updateUser(String email, String name, int roleId) {
         String sql = "UPDATE user SET name = ?, roleId = ? WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -56,7 +53,6 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         return false;
     }
 
-    @Override
     public boolean updatePassword(String email, String oldPassword, String newPassword) {
         String sql = "UPDATE user SET password = ? WHERE email = ? AND password = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -71,7 +67,6 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         return false;
     }
 
-    @Override
     public FlipFitUser getUserByEmail(String email) {
         String sql = "SELECT * FROM user WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -93,7 +88,6 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         return null;
     }
 
-    @Override
     public void listAllUsers() {
         String sql = "SELECT * FROM user";
         try (Statement stmt = connection.createStatement();
@@ -109,26 +103,31 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         }
     }
 
-    @Override
-    public boolean login(String email, String password) {
+    public FlipFitUser login(String email, String password) {
         String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            return rs.next(); // If a record is found, login is successful
+            if (rs.next()) {
+                return new FlipFitUser(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getInt("roleId")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
-    @Override
     public String generateToken(int userId) {
         return "token_" + userId; // Simplified example (not secure)
     }
 
-    @Override
     public boolean validateToken(String token) {
         return token.startsWith("token_"); // Simplified validation
     }

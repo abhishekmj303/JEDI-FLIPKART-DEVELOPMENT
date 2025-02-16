@@ -3,30 +3,35 @@
  */
 package com.flipkart.dao;
 
+import com.flipkart.bean.FlipFitGymCustomer;
+import com.flipkart.bean.FlipFitNotification;
+import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitSlotBooking;
+
 /**
  * 
  */
 public interface FlipFitGymCustomerDao {
 
-    void addGymCustomer(FlipFitGymCustomer customer);
+    public void addGymCustomer(FlipFitGymCustomer customer);
 
-    void setPreferredCity(int userId, String city);
+    public void setPreferredCity(int userId, String city);
 
-    void bookSlot(FlipFitSlotBooking booking);
+    public void bookSlot(FlipFitSlotBooking booking);
 
-    boolean cancelBooking(int bookingId);
+    public boolean cancelBooking(int bookingId);
 
-    void listAllCentersByCity(String city);
+    public void listAllCentersByCity(String city);
 
-    void viewAvailableSlots(int gymCenterId);
+    public void viewAvailableSlots(int gymCenterId);
 
-    void viewBookedSlots(int userId);
+    public void viewBookedSlots(int userId);
 
-    void processPayment(FlipFitPayment payment);
+    public void processPayment(FlipFitPayment payment);
 
-    boolean refundPayment(int paymentId);
+    public boolean refundPayment(int paymentId);
 
-    String getPaymentStatus(int paymentId);
+    public String getPaymentStatus(int paymentId);
 
-    void sendNotification(FlipFitNotification notification);
+    public void sendNotification(FlipFitNotification notification);
 }
