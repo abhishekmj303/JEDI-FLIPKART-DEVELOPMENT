@@ -1,6 +1,7 @@
 package com.flipkart.dao;
 
 import java.sql.Connection;
+import com.flipkart.constant.SQLConstant;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,12 +13,13 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
     // Constructor initializes the database connection once
     public FlipFitGymAdminDaoImpl() {
-        this.connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		this.connection = Database.getConnection();
     }
 
     @Override
     public boolean approveGymOwner(int ownerId) {
-        String query = "UPDATE gymOwner SET isApproved = TRUE WHERE id = ?";
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_OWNER;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, ownerId);
             int rowsUpdated = stmt.executeUpdate();
@@ -35,7 +37,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
     @Override
     public boolean approveGymCentre(int centreId) {
-        String query = "UPDATE gymCenter SET isApproved = TRUE WHERE id = ?";
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, centreId);
             int rowsUpdated = stmt.executeUpdate();
@@ -53,7 +55,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
     @Override
     public void listAllGymCentres() {
-        String query = "SELECT id, name, address, city FROM gymCenter";
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             System.out.println("Listing all Gym Centres:");

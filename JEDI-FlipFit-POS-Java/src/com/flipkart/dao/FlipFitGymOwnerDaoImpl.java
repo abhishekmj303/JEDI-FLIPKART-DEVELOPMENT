@@ -1,6 +1,7 @@
 package com.flipkart.dao;
 
 import com.flipkart.datasource.Database;
+import com.flipkart.constant.SQLConstant;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,13 +13,14 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
     private int centreId;
 
     public FlipFitGymOwnerDaoImpl() {
-        this.connection = Database.getInstance().getConnection();
+        Database.getInstance();
+		this.connection = Database.getConnection();
         this.centreId = 1;
     }
 
     @Override
     public void addGymOwnerDAO(int userId, String aadhaarNo, String pan, String phoneNo) {
-        String sql = "INSERT INTO GymOwner (user_id, aadhaar_no, pan, phone_no) VALUES (?, ?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_REGISTER_GYM_OWNER;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             statement.setString(2, aadhaarNo);
@@ -33,7 +35,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
 
     @Override
     public int addCenterDAO(int ownerId, String centre, String location) {
-        String sql = "INSERT INTO GymCenter (owner_id, name, location) VALUES (?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_ADD_GYM_CENTRE;
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, ownerId);
             statement.setString(2, centre);
@@ -56,7 +58,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
 
     @Override
     public void addSlot(int centerId, List<String> startTimes, List<String> endTimes) {
-        String sql = "INSERT INTO Slot (center_id, start_time, end_time, capacity) VALUES (?, ?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
         int defaultCapacity = 10;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < startTimes.size(); i++) {
@@ -74,7 +76,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
 
     @Override
     public void viewSlotsStatusDAO() {
-        String sql = "SELECT g.name AS gym_name, s.start_time, s.end_time FROM Slot s JOIN GymCenter g ON s.center_id = g.id";
+        String sql = SQLConstant.FLIPFIT_FETCH_ALL_SLOTS;
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             System.out.println("Current Slot Status:");
