@@ -13,7 +13,7 @@ public interface FlipFitGymAdminDao {
      * @param ownerId The ID of the gym owner to be approved.
      * @return true if the gym owner was successfully approved, false otherwise.
      */
-    public boolean approveGymOwner(int ownerId);
+    public boolean approveGymCentre(int centreId) throws GymCenterNotFoundException;
 
     /**
      * Approves a gym center.
@@ -21,7 +21,7 @@ public interface FlipFitGymAdminDao {
      * @param centreId The ID of the gym center to be approved.
      * @return true if the gym center was successfully approved, false otherwise.
      */
-    public boolean approveGymCentre(int centreId);
+    public boolean approveGymOwner(int ownerId) public boolean approveGymOwner(int ownerId) throws GymOwnerNotRegisteredException;
 
     /**
      * Lists all the gym centers in the system.

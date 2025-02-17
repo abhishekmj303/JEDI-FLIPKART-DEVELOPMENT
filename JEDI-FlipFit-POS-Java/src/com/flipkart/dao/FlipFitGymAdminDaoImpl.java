@@ -18,7 +18,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
     }
 
     @Override
-    public boolean approveGymOwner(int ownerId) {
+    public boolean approveGymOwner(int ownerId) public boolean approveGymOwner(int ownerId) throws GymOwnerNotRegisteredException {
         String query = SQLConstant.FLIPFIT_APPROVE_GYM_OWNER;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, ownerId);
@@ -30,13 +30,13 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
                 System.out.println("Gym owner ID not found: " + ownerId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GymOwnerNotRegisteredException("Error in approving Gym");
         }
         return false;
     }
 
     @Override
-    public boolean approveGymCentre(int centreId) {
+    public boolean approveGymCentre(int centreId) throws GymCenterNotFoundException {
         String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, centreId);
@@ -48,7 +48,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
                 System.out.println("Gym center ID not found: " + centreId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GymCenterNotFoundException("Error in approving gym");
         }
         return false;
     }

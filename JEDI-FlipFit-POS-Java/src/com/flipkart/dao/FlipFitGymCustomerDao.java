@@ -17,7 +17,7 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param customer The customer to be added.
      */
-    public void addGymCustomer(FlipFitGymCustomer customer);
+    public void addGymCustomer(FlipFitGymCustomer customer) throws UserNotFoundException;
 
     /**
      * Sets the preferred city for a gym customer.
@@ -25,14 +25,14 @@ public interface FlipFitGymCustomerDao {
      * @param userId The ID of the customer.
      * @param city The preferred city to be set.
      */
-    public void setPreferredCity(int userId, String city);
+    public void setPreferredCity(int userId, String city) throws CustomerNotRegisteredException;
 
     /**
      * Books a slot for a gym customer.
      * 
      * @param booking The booking details.
      */
-    public void bookSlot(FlipFitSlotBooking booking);
+    public void bookSlot(FlipFitSlotBooking booking) throws GymCenterNotFoundException;
 
     /**
      * Cancels a booking made by a gym customer.
@@ -40,7 +40,7 @@ public interface FlipFitGymCustomerDao {
      * @param bookingId The ID of the booking to be canceled.
      * @return true if the booking was successfully canceled, false otherwise.
      */
-    public boolean cancelBooking(int bookingId);
+    public boolean cancelBooking(int bookingId) throws BookingException ;
 
     /**
      * Lists all gym centers in a specified city.
@@ -54,21 +54,21 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param gymCenterId The ID of the gym center for which the available slots are to be viewed.
      */
-    public void viewAvailableSlots(int gymCenterId);
+    public void viewAvailableSlots(int gymCenterId) throws GymCenterNotFoundException ;
 
     /**
      * Views the slots booked by a gym customer.
      * 
      * @param userId The ID of the customer whose bookings are to be viewed.
      */
-    public void viewBookedSlots(int userId);
+    public void viewBookedSlots(int userId) throws CustomerNotRegisteredException;
 
     /**
      * Processes a payment for a gym customer.
      * 
      * @param payment The payment details.
      */
-    public void processPayment(FlipFitPayment payment);
+    public void processPayment(FlipFitPayment payment) throws PaymentFailedException;
 
     /**
      * Refunds a payment made by a gym customer.
@@ -76,7 +76,7 @@ public interface FlipFitGymCustomerDao {
      * @param paymentId The ID of the payment to be refunded.
      * @return true if the payment was successfully refunded, false otherwise.
      */
-    public boolean refundPayment(int paymentId);
+    public boolean refundPayment(int paymentId) throws PaymentFailedException;
 
     /**
      * Gets the status of a payment.

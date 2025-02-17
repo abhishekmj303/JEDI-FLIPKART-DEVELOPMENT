@@ -19,7 +19,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     };
     
     // 1. Add a Gym Customer (insert into gymCustomer table)
-    public void addGymCustomer(FlipFitGymCustomer customer) {
+    public void addGymCustomer(FlipFitGymCustomer customer) throws UserNotFoundException {
         String sql = SQLConstant.FLIPFIT_REGISTER_GYM_CUSTOMER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, customer.getId());
@@ -27,12 +27,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
             stmt.executeUpdate();
             System.out.println("Added Gym Customer: " + customer);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new UserNotFoundException("Error in finding User");
         }
     }
 
     // 2. Set Preferred City for a Gym Customer
-    public void setPreferredCity(int userId, String city) {
+    public void setPreferredCity(int userId, String city) throws CustomerNotRegisteredException  {
         String sql = SQLConstant.FLIPFIT_UPDATE_PREFERRED_CITY;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, city);
@@ -44,13 +44,13 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 System.out.println("Customer with user ID " + userId + " not found.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new CustomerNotRegisteredException("Error in customer Register");
         }
     }
 
     // 3. Book a Slot (insert into slotBooking table)
     // Note: The slotBooking table schema: id, slotId, customerId, date
-    public void bookSlot(FlipFitSlotBooking booking) {
+    public void bookSlot(FlipFitSlotBooking booking) throws GymCenterNotFoundException {
         String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, booking.getId());
@@ -62,12 +62,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
             stmt.executeUpdate();
             System.out.println("Booking inserted: " + booking);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GymCenterNotFoundException("Error in finding Gym center");
         }
     }
 
     // 4. Cancel a Booking (delete from slotBooking table)
-    public boolean cancelBooking(int bookingId) {
+    public boolean cancelBooking(int bookingId) throws BookingException {
         String sql = SQLConstant.FLIPFIT_CANCEL_BOOKING;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bookingId);
@@ -79,7 +79,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 System.out.println("No booking found with ID: " + bookingId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new BookingException("Error in Booking");
         }
         return false;
     }
@@ -106,7 +106,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     }
 
     // 6. View Available Slots for a given Gym Center (query slot table)
-    public void viewAvailableSlots(int gymCenterId) {
+    public void viewAvailableSlots(int gymCenterId) throws GymCenterNotFoundException {
         String sql = SQLConstant.FLIPFIT_FETCH_SLOTS_BY_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, gymCenterId);
@@ -119,12 +119,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 System.out.println("Slot ID: " + slotId + ", Slot Info: " + slotInfo + ", Available Seats: " + availableSeats);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GymCenterNotFoundException("Error in finding gym center");
         }
     }
 
     // 7. View Booked Slots for a given customer (query slotBooking table)
-    public void viewBookedSlots(int userId) {
+    public void viewBookedSlots(int userId) throws CustomerNotRegisteredException {
         String sql = SQLConstant.FLIPFIT_FETCH_BOOKINGS_BY_CUSTOMER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
@@ -137,13 +137,13 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 System.out.println("Booking ID: " + bookingId + ", Slot ID: " + slotId + ", Date: " + date);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new CustomerNotRegisteredException("Error in view Booking slots")
         }
     }
 
     // 8. Process Payment (insert into payment table)
     // Note: The payment table schema: id, customerId, bookingId, amount, status, paymentMethod, transactionDate
-    public void processPayment(FlipFitPayment payment) {
+    public void processPayment(FlipFitPayment payment) throws PaymentFailedException{
         String sql = SQLConstant.FLIPFIT_PROCESS_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, payment.getId());
@@ -158,12 +158,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
             stmt.executeUpdate();
             System.out.println("Processed payment: " + payment);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new PaymentFailedException("Error in payment processing.")
         }
     }
 
     // 9. Refund Payment (update payment table)
-    public boolean refundPayment(int paymentId) {
+    public boolean refundPayment(int paymentId) throws PaymentFailedException {
         String sql = SQLConstant.FLIPFIT_REFUND_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, paymentId);
@@ -175,7 +175,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 System.out.println("Payment with ID " + paymentId + " not found for refund.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new PaymentFailedException("Error in payment Refund.")
         }
         return false;
     }
