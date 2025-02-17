@@ -1,5 +1,8 @@
 package com.flipkart.dao;
 
+import java.util.List;
+
+import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
@@ -32,7 +35,7 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param booking The booking details.
      */
-    public void bookSlot(FlipFitSlotBooking booking);
+    public int bookSlot(FlipFitSlotBooking booking);
 
     /**
      * Cancels a booking made by a gym customer.
@@ -47,7 +50,7 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param city The city for which the gym centers are to be listed.
      */
-    public void listAllCentersByCity(String city);
+    public List<FlipFitGymCenter> listAllCentersByCity(String city);
 
     /**
      * Views the available slots for a specified gym center.
@@ -92,4 +95,6 @@ public interface FlipFitGymCustomerDao {
      * @param notification The notification details to be sent.
      */
     public void sendNotification(FlipFitNotification notification);
+
+    public List<String> getAllCities();
 }

@@ -2,6 +2,10 @@ package com.flipkart.dao;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
@@ -48,23 +52,43 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
         }
     }
 
-    // 3. Book a Slot (insert into slotBooking table)
-    // Note: The slotBooking table schema: id, slotId, customerId, date
-    public void bookSlot(FlipFitSlotBooking booking) {
+    public int bookSlot(FlipFitSlotBooking booking) {
         String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, booking.getId());
-            stmt.setInt(2, booking.getSlotId());
-            stmt.setInt(3, booking.getCustomerId());
-            // Convert LocalDateTime to java.sql.Date (using only the date portion)
-            LocalDate bookingDate = booking.getDateTime().toLocalDate();
-            stmt.setDate(4, Date.valueOf(bookingDate));
-            stmt.executeUpdate();
-            System.out.println("Booking inserted: " + booking);
+        int bookingId = -1; 
+        
+        int existingBookingId = checkPrevSlot(booking.getCustomerId(), booking.getDateTime().toLocalDate());
+        if (existingBookingId != 0) {
+            cancelBooking(existingBookingId);
+        }
+    
+        try {
+    
+            try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, booking.getSlotId());
+                stmt.setInt(2, booking.getCustomerId());
+                stmt.setDate(3, Date.valueOf(booking.getDateTime().toLocalDate()));
+        
+                int rowsInserted = stmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            bookingId = generatedKeys.getInt(1);
+                            System.out.println("Booking successfully inserted with ID: " + bookingId);
+                        }
+                    }
+                }
+            }
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+    
+        return bookingId;
     }
+    
+    
+    
 
     // 4. Cancel a Booking (delete from slotBooking table)
     public boolean cancelBooking(int bookingId) {
@@ -84,26 +108,72 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
         return false;
     }
 
-    // 5. List All Gym Centers by City (query gymCenter table)
-    public void listAllCentersByCity(String city) {
-        String sql = SQLConstant.FLIPFIT_FETCH_GYM_CENTRES_BY_CITY;
+    public String getPreferredCity(int userId) {
+        String sql = SQLConstant.FLIPFIT_FETCH_USER_PREFERRED_CITY;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, city);
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("Listing gym centers for city " + city + ":");
-            while (rs.next()) {
-                int centerId = rs.getInt("id");
-                String name = rs.getString("name");
-                String address = rs.getString("address");
-                String centerCity = rs.getString("city");
-                String seatsPerHour = rs.getString("seatsPerHour");
-                // You can fetch other columns as needed
-                System.out.println("Center ID: " + centerId + ", Name: " + name + ", Address: " + address + ", City: " + centerCity + ", Seats/Hour: " + seatsPerHour);
+            if (rs.next()) {
+                return rs.getString("preferredCity");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
+    
+    public List<FlipFitGymCenter> listAllCentersByCity(int userId) {
+    List<FlipFitGymCenter> centers = new ArrayList<>();
+    
+    String city = getPreferredCity(userId);
+    if (city == null || city.isEmpty()) {
+        System.out.println("No preferred city found for user ID: " + userId);
+        return centers; 
+    }
+    
+    String sql = SQLConstant.FLIPFIT_FETCH_GYM_CENTRES_BY_CITY;  
+    // "SELECT * FROM gymCenter WHERE city = ?"
+    
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, city);
+        ResultSet rs = stmt.executeQuery();
+        System.out.println("Listing gym centers for city " + city + ":");
+        
+        int index = 1;
+        while (rs.next()) {
+            int centerId = rs.getInt("id");
+            String name = rs.getString("name");
+            String address = rs.getString("address");
+            String centerCity = rs.getString("city");
+            int seatsPerHour = rs.getInt("seatsPerHour");
+            java.sql.Time startTimeMorning = rs.getTime("startTimeMorning");
+            java.sql.Time endTimeMorning = rs.getTime("endTimeMorning");
+            java.sql.Time startTimeEvening = rs.getTime("startTimeEvening");
+            java.sql.Time endTimeEvening = rs.getTime("endTimeEvening");
+            
+            FlipFitGymCenter center = new FlipFitGymCenter(
+                    centerId, 
+                    name, 
+                    address, 
+                    centerCity, 
+                    seatsPerHour, 
+                    startTimeMorning, 
+                    endTimeMorning, 
+                    startTimeEvening, 
+                    endTimeEvening);
+                    
+            centers.add(center);
+            System.out.println(index + ". " + center);
+            index++;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    
+    return centers;
+}
+
+    
 
     // 6. View Available Slots for a given Gym Center (query slot table)
     public void viewAvailableSlots(int gymCenterId) {
@@ -146,17 +216,19 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     public void processPayment(FlipFitPayment payment) {
         String sql = SQLConstant.FLIPFIT_PROCESS_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, payment.getId());
-            stmt.setInt(2, payment.getCustomerId());
-            stmt.setInt(3, payment.getBookingId());
-            stmt.setDouble(4, payment.getAmount());
-            stmt.setString(5, payment.getStatus());
-            stmt.setString(6, payment.getPaymentMethod());
-            // Convert LocalDateTime to java.sql.Date (using only the date part)
-            LocalDate transactionDate = payment.getTransactionDate().toLocalDate();
-            stmt.setDate(7, Date.valueOf(transactionDate));
-            stmt.executeUpdate();
-            System.out.println("Processed payment: " + payment);
+            stmt.setInt(1, payment.getCustomerId());
+            stmt.setInt(2, payment.getBookingId());
+            stmt.setDouble(3, payment.getAmount());
+            stmt.setString(4, payment.getStatus());
+            stmt.setString(5, payment.getPaymentMethod());
+            stmt.setDate(6, Date.valueOf(payment.getTransactionDate().toLocalDate()));
+    
+            int rowsInserted = stmt.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Payment successfully processed: " + payment);
+            } else {
+                System.out.println("Error: Payment failed.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -202,20 +274,60 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     public void sendNotification(FlipFitNotification notification) {
         String sql = SQLConstant.FLIPFIT_SEND_NOTIFICATION;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, notification.getId());
-            stmt.setInt(2, notification.getUserId());
-            stmt.setString(3, notification.getMessage());
+            stmt.setInt(1, notification.getUserId());
+            stmt.setString(2, notification.getMessage());
             // Use Timestamp for dateTime column
             if (notification.getDateTime() != null) {
-                stmt.setTimestamp(4, Timestamp.valueOf(notification.getDateTime()));
+                stmt.setTimestamp(3, Timestamp.valueOf(notification.getDateTime()));
             } else {
-                stmt.setTimestamp(4, null);
+                stmt.setTimestamp(3, null);
             }
-            stmt.setBoolean(5, notification.isRead());
+            stmt.setBoolean(4, notification.isRead());
             stmt.executeUpdate();
             System.out.println("Notification sent: " + notification);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public List<String> getAllCities() {
+        String sql = SQLConstant.FLIPFIT_GET_CITIES;
+        List<String> cities = new ArrayList<>();
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                cities.add(rs.getString("city"));
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return cities;
+    }
+
+    public int checkPrevSlot(int userId, LocalDate date) {
+        String sql = SQLConstant.FLIPFIT_CHECK_SLOT;
+        //"SELECT booking_id FROM bookings WHERE customer_id = ? AND DATE(datetime) = ?"
+        int bookingId = 0;
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setDate(2, Date.valueOf(date));
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    bookingId = rs.getInt("booking_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(bookingId != 0) System.out.println("Booking already found with booking ID" + bookingId );
+        return bookingId;
+    }
+    
+
 }

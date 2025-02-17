@@ -1,5 +1,6 @@
 package com.flipkart.business;
 
+import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
@@ -8,7 +9,7 @@ import com.flipkart.dao.FlipFitGymCustomerDao;
 import com.flipkart.dao.FlipFitGymCustomerDaoImpl;
 
 import java.time.LocalDateTime;
-
+import java.util.*;
 public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     
     private FlipFitGymCustomerDao gymCustomerDao;
@@ -24,38 +25,110 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     }
 
     // 2. Set Preferred City
-    public void setPreferredCity(int userId, String city) {
-        gymCustomerDao.setPreferredCity(userId, city);
+    public void setPreferredCity(int userId) {
+        List<String> cities = gymCustomerDao.getAllCities();
+        if (cities.isEmpty()) {
+            System.out.println("No cities available.");
+            return;
+        }
+        System.out.println("Available Cities:");
+        for (int i = 0; i < cities.size(); i++) {
+            System.out.println((i + 1) + ". " + cities.get(i));
+        }
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number corresponding to your preferred city: ");
+        int choice;
+        while (true) {
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > cities.size()) {
+                    System.out.print("Invalid choice. Please select a valid city number: ");
+                } else {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number: ");
+            }
+        }
+    
+        String selectedCity = cities.get(choice - 1);
+        gymCustomerDao.setPreferredCity(userId, selectedCity);
+        System.out.println("Preferred city set to: " + selectedCity);
     }
 
     // 3. Book a Slot
-    public void bookSlot(int userId, int slotId) {
-        FlipFitSlotBooking booking = new FlipFitSlotBooking(1, slotId, userId, LocalDateTime.now());
-        gymCustomerDao.bookSlot(booking);
-
-        System.out.println("Proceeding to payment...");
-        processPayment(userId, 1000);
-
-        if (getPaymentStatus(1).equals("Completed")) {
-            sendNotification(userId, "Booking confirmed for slot " + slotId);
-        } else {
-            sendNotification(userId, "Payment not successful for booking of slot " + slotId);
+    public void bookSlot(int userId) {
+    List<FlipFitGymCenter> centers = gymCustomerDao.listAllCentersByCity(userId);
+    
+    if (centers.isEmpty()) {
+        System.out.println("No gym centers available for your preferred city.");
+        return;
+    }
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Please enter the number corresponding to the center you want to book:");
+    
+    int choice = -1;
+    while (true) {
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+            if (choice < 1 || choice > centers.size()) {
+                System.out.println("Invalid selection. Please enter a number between 1 and " + centers.size() + ":");
+            } else {
+                break;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number:");
         }
     }
+    
+    FlipFitGymCenter selectedCenter = centers.get(choice - 1);
+    System.out.println("You selected: " + selectedCenter);
+    gymCustomerDao.viewAvailableSlots(selectedCenter.getId());
+    System.out.println("Enter the slot ID you wish to book:");
+    int slotId;
+    while (true) {
+        try {
+            slotId = Integer.parseInt(scanner.nextLine());
+            break;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid slot ID. Please enter a valid number:");
+        }
+    }
+    FlipFitSlotBooking booking = new FlipFitSlotBooking(selectedCenter.getId(), slotId, userId, LocalDateTime.now());
+    int bookingId = gymCustomerDao.bookSlot(booking);
+    
+    System.out.println("Proceeding to payment...");
+    processPayment(userId, bookingId, 1000);
+    
+    if (getPaymentStatus(1).equals("Completed")) {
+        sendNotification(userId, "Booking confirmed for slot " + slotId);
+    } else {
+        sendNotification(userId, "Payment not successful for booking of slot " + slotId);
+    }
+
+}
+
 
     // 4. Cancel a Booking
-    public boolean cancelBooking(int bookingId) {
+    public boolean cancelBooking(int userId) {
+        gymCustomerDao.viewBookedSlots(userId);
+        System.out.println("Enter preferred booking ID for canceling:");
+    
+        Scanner sc = new Scanner(System.in); 
+        int bookingId = sc.nextInt();
+        sc.nextLine(); 
         boolean success = gymCustomerDao.cancelBooking(bookingId);
         if (success) {
-            refundPayment(1);
-            sendNotification(1, "Booking cancelled for booking ID " + bookingId);
+            refundPayment(bookingId); // Pass correct bookingId instead of hardcoded `1`
+            sendNotification(userId, "Booking cancelled for booking ID " + bookingId);
         }
+    
         return success;
     }
 
     // 5. List All Gym Centers by City
-    public void listAllCentersByCity(String city) {
-        gymCustomerDao.listAllCentersByCity(city);
+    public void listAllCentersByCity(int userId) {
+        gymCustomerDao.listAllCentersByCity(userId);
     }
 
     // 6. View Available Slots for a Gym Center
@@ -69,8 +142,8 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     }
 
     // 8. Process Payment
-    public void processPayment(int customerId, double amount) {
-        FlipFitPayment payment = new FlipFitPayment(1, 101, customerId, amount, "Completed", "CreditCard", LocalDateTime.now());
+    public void processPayment(int customerId, int bookingId, double amount) {
+        FlipFitPayment payment = new FlipFitPayment(1, customerId, bookingId, amount, "Completed", "CreditCard", LocalDateTime.now());
         gymCustomerDao.processPayment(payment);
     }
 
@@ -86,7 +159,12 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
 
     // 11. Send Notification
     public void sendNotification(int customerId, String notificationMessage) {
-        FlipFitNotification notification = new FlipFitNotification(1, customerId, notificationMessage, null, false);
+        FlipFitNotification notification = new FlipFitNotification(1, customerId, notificationMessage,LocalDateTime.now() , false);
         gymCustomerDao.sendNotification(notification);
+    }
+
+    public void listAllCentersByCity(String city) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listAllCentersByCity'");
     }
 }
