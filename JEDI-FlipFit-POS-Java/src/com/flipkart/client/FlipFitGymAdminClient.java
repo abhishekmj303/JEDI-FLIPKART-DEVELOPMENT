@@ -30,7 +30,7 @@ public class FlipFitGymAdminClient {
                 	adminBusiness.listAllGymCentres();
                     break;
                 case 4:
-                	userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
+                	userBusiness.updateUser(user.getId());
                 	break;
                 case 5:
                 	userBusiness.logout(user.getEmail());

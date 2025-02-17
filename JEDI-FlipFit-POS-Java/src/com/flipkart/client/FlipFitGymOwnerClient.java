@@ -26,7 +26,7 @@ public class FlipFitGymOwnerClient {
                     gymOwnerBusiness.viewSlotsStatus();
                     break;
                 case 3:
-                	userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
+                	userBusiness.updateUser(user.getId());
                 	break;
                 case 4:
                     userBusiness.logout(user.getEmail());

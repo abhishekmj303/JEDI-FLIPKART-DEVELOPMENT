@@ -10,7 +10,7 @@ public class SQLConstant {
     public static final String FLIPFIT_FETCH_ALL_USERS = "SELECT * FROM user";
     public static final String FLIPFIT_LOGIN = "SELECT * FROM user WHERE email = ? AND password = ?";
     public static final String FLIPFIT_FETCH_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
-    public static final String FLIPFIT_UPDATE_USER = "UPDATE user SET name = ?, roleId = ? WHERE email = ?";
+    public static final String FLIPFIT_UPDATE_USER = "UPDATE user SET name = ? WHERE id = ?";
     public static final String FLIPFIT_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE email = ? AND password = ?";
     public static final String FLIPFIT_DELETE_USER = "DELETE FROM user WHERE email = ?";
 
