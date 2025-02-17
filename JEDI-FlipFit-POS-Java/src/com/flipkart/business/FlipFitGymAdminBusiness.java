@@ -56,4 +56,8 @@ public class FlipFitGymAdminBusiness implements FlipFitGymAdminInterface {
         System.out.println("Listing all Gym Centres:");
         gymAdminDAO.listAllGymCentres();
     }
+    
+    public void listAllGymOwners() {
+    	System.out.println("Listing all Gym Owners:");
+    }
 }

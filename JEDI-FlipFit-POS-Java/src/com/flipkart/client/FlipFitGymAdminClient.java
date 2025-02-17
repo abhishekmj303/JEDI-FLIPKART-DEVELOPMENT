@@ -12,10 +12,11 @@ public class FlipFitGymAdminClient {
         do {
             System.out.println("\n===== Gym Admin Menu =====");
             System.out.println("1. Approve a Gym Owner");
-            System.out.println("2. Approve a Gym Center");
-            System.out.println("3. View All Gym Centers");
-            System.out.println("4. Edit Profile");
-            System.out.println("5. Logout");
+            System.out.println("2. View All Gym Owners");
+            System.out.println("3. Approve a Gym Center");
+            System.out.println("4. View All Gym Centers");
+            System.out.println("5. Edit Profile");
+            System.out.println("6. Logout");
             System.out.print("Enter your choice: ");
             choice = Integer.parseInt(scanner.nextLine());
             
@@ -23,22 +24,24 @@ public class FlipFitGymAdminClient {
             	case 1:
             		adminBusiness.approveGymOwner(201);
             		break;
-                case 2:
+            	case 2:
+            		adminBusiness.listAllGymOwners();
+                case 3:
                 	adminBusiness.approveGymCentre(101);
                     break;
-                case 3:
+                case 4:
                 	adminBusiness.listAllGymCentres();
                     break;
-                case 4:
+                case 5:
                 	userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
                 	break;
-                case 5:
+                case 6:
                 	userBusiness.logout(user.getEmail());
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
                     break;
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
 }
