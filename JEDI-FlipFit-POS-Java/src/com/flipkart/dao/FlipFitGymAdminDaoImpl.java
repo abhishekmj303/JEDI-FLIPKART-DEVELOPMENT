@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.flipkart.datasource.Database;
+import com.flipkart.exception.GymCenterNotFoundException;
+import com.flipkart.exception.GymOwnerNotRegisteredException;
 
 public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
@@ -16,7 +18,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
     }
 
     @Override
-    public boolean approveGymOwner(int ownerId) {
+    public boolean approveGymOwner(int ownerId) throws GymOwnerNotRegisteredException {
         String query = "UPDATE gymOwner SET isApproved = TRUE WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, ownerId);
@@ -28,13 +30,13 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
                 System.out.println("Gym owner ID not found: " + ownerId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new GymOwnerNotRegisteredException("Error in approving Gym");
         }
         return false;
     }
 
     @Override
-    public boolean approveGymCentre(int centreId) {
+    public boolean approveGymCentre(int centreId) throws GymCenterNotFoundException {
         String query = "UPDATE gymCenter SET isApproved = TRUE WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, centreId);
@@ -46,7 +48,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
                 System.out.println("Gym center ID not found: " + centreId);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+              throw new GymCenterNotFoundException("Error in approving gym")
         }
         return false;
     }
