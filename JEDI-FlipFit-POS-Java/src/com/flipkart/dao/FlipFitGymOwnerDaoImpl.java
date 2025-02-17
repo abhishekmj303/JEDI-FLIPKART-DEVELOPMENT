@@ -65,7 +65,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
             statement.setTime(8, Time.valueOf(eveningStart));
             statement.setTime(9, Time.valueOf(eveningEnd));
             statement.setInt(10, 0); // isApproved default 0
-            statement.setInt(11, ownerId);
+            
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
@@ -105,16 +105,39 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
 
     @Override
     public void viewSlotsStatusDAO() {
-        String sql = SQLConstant.FLIPFIT_FETCH_ALL_SLOTS;
+        String sql = "SELECT gc.name AS gym_name, s.slotInfo AS slot_details, s.availableSeats, " +
+                     "gc.startTimeMorning, gc.endTimeMorning, gc.startTimeEvening, gc.endTimeEvening " +
+                     "FROM gymCenter gc " +
+                     "LEFT JOIN slot s ON gc.id = s.centerId";
+
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             System.out.println("Current Slot Status:");
+
             while (resultSet.next()) {
-                System.out.println("Gym: " + resultSet.getString("gym_name") +
-                                   " | Slot: " + resultSet.getString("start_time") + " - " + resultSet.getString("end_time"));
+                String gymName = resultSet.getString("gym_name");
+                String slotDetails = resultSet.getString("slot_details");
+                int availableSeats = resultSet.getInt("availableSeats");
+                
+                String morningStart = resultSet.getString("startTimeMorning");
+                String morningEnd = resultSet.getString("endTimeMorning");
+                String eveningStart = resultSet.getString("startTimeEvening");
+                String eveningEnd = resultSet.getString("endTimeEvening");
+
+                System.out.println("Gym: " + gymName + 
+                                   " | Slot: " + slotDetails + 
+                                   " | Available Seats: " + availableSeats);
+
+                if (morningStart != null && morningEnd != null) {
+                    System.out.println("  ➝ Morning Slot: " + morningStart + " - " + morningEnd);
+                }
+                if (eveningStart != null && eveningEnd != null) {
+                    System.out.println("  ➝ Evening Slot: " + eveningStart + " - " + eveningEnd);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 }

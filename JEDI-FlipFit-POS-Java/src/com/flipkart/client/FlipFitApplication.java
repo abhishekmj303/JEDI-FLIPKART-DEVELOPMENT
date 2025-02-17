@@ -147,7 +147,7 @@ public class FlipFitApplication {
         String password = scanner.nextLine();
 
         int userId = userBusiness.addUser(name, email, password, 2);
-        gymOwnerBusiness.addGymOwner(userId, "1234567812345678", "CKOE1234M", "9876543210");
+        gymOwnerBusiness.addGymOwner(userId);
     }
 
     /**

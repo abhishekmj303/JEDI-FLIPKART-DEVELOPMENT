@@ -25,7 +25,7 @@ public class SQLConstant {
     public static final String FLIPFIT_APPROVE_GYM_OWNER = "UPDATE gymOwner SET isApproved = 1 WHERE id = ?";
 
     //------------------- GYM CENTER QUERIES ---------------------
-    public static final String FLIPFIT_ADD_GYM_CENTRE = "INSERT INTO gymCenter (id, name, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening, isApproved, gymOwnerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String FLIPFIT_ADD_GYM_CENTRE = "INSERT INTO gymCenter (gymOwnerId, name, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening, isApproved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String FLIPFIT_FETCH_ALL_GYM_CENTRES = "SELECT * FROM gymCenter";
     public static final String FLIPFIT_FETCH_GYM_CENTRES_BY_OWNER = "SELECT * FROM gymCenter WHERE gymOwnerId = ?";
     public static final String FLIPFIT_FETCH_GYM_CENTRES_BY_CITY = "SELECT * FROM gymCenter WHERE city = ?";
