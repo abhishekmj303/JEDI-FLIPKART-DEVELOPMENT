@@ -15,5 +15,5 @@ public interface FlipFitGymAdminInterface {
 	
 	public void listAllGymCentres();
 	
-	public void listAllGymOwners()
+	public void listAllGymOwners();
 }
