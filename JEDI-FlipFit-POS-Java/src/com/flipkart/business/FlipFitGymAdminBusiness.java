@@ -1,62 +1,63 @@
-/**
- * 
- */
 package com.flipkart.business;
 
-import java.util.HashMap;
-import com.flipkart.bean.FlipFitGymAdmin;
-import com.flipkart.bean.FlipFitGymOwner;
-import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.dao.FlipFitGymAdminDao;
 import com.flipkart.dao.FlipFitGymAdminDaoImpl;
-/**
- * 
- */
+
 public class FlipFitGymAdminBusiness implements FlipFitGymAdminInterface {
-	private HashMap<Integer, FlipFitGymOwner> owners;
-	private HashMap<Integer, FlipFitGymCenter> centres;
-	private FlipFitGymAdminDao adminDao;
 
+    private FlipFitGymAdminDao gymAdminDAO;
 
-	 public FlipFitGymAdminBusiness(
-		        HashMap<Integer, FlipFitGymOwner> owners,
-		        HashMap<Integer, FlipFitGymCenter> centres
-		) {
-			this.owners = owners;
-			this.centres = centres;
-			this.adminDao = new FlipFitGymAdminDaoImpl(); // Initialize DAO
-	}
+    /**
+     * Constructor to initialize the DAO instance.
+     */
+    public FlipFitGymAdminBusiness() {
+        this.gymAdminDAO = new FlipFitGymAdminDaoImpl();
+    }
 
-	 public void addGymAdmin(int userId, String name, String email, String password) {
-	        FlipFitGymAdmin admin = new FlipFitGymAdmin(userId, name, email, password);
-	        adminDao.addGymAdmin(admin);
-	}
-	
-	public void approveGymOwner(int ownerId) {
-		if(owners.containsKey(ownerId)) {
-			FlipFitGymOwner owner = owners.get(ownerId);
-			owner.setApproved(true);
-			System.out.println("Gym owner approved with ID: " + ownerId);
-	}else {
-		System.out.println("Gym owner ID not found: " + ownerId);
-	}
-	}
-	
-	public void approveGymCentre(int centreId) {
-		if(centres.containsKey(centreId)) {
-			FlipFitGymCenter center = centres.get(centreId);
-			center.setApproved(true);
-			System.out.println("Gym center approved with ID: " + centreId);
-		}else {
-		System.out.println("Gym centre ID not found: " + centreId);
-	
-		}
-		}
-    
-    public void listAllGymCentres() {
-        System.out.println("Listing all Gym Centres with details");
-        for (int id : centres.keySet()) {
-            System.out.println("Center ID: " + id + " - " + centres.get(id).getName());
+    /**
+     * Adds a new gym admin (this method needs further implementation if admins are stored in the DB).
+     * @param userId ID of the user to be added as admin.
+     */
+    public void addGymAdmin(int userId) {
+        System.out.println("Adding gym admin ID: " + userId);
+        // Logic to add gym admin can be implemented when DB schema supports it.
+    }
+
+    /**
+     * Approves a gym owner by updating the database using DAO.
+     * @param ownerId ID of the gym owner to approve.
+     */
+    public void approveGymOwner(int ownerId) {
+        boolean isApproved = gymAdminDAO.approveGymOwner(ownerId);
+        if (isApproved) {
+            System.out.println("Gym owner approved with ID: " + ownerId);
+        } else {
+            System.out.println("Gym owner ID not found: " + ownerId);
         }
+    }
+
+    /**
+     * Approves a gym center by updating the database using DAO.
+     * @param centreId ID of the gym center to approve.
+     */
+    public void approveGymCentre(int centreId) {
+        boolean isApproved = gymAdminDAO.approveGymCentre(centreId);
+        if (isApproved) {
+            System.out.println("Gym center approved with ID: " + centreId);
+        } else {
+            System.out.println("Gym center ID not found: " + centreId);
+        }
+    }
+
+    /**
+     * Lists all gym centers using DAO.
+     */
+    public void listAllGymCentres() {
+        System.out.println("Listing all Gym Centres:");
+        gymAdminDAO.listAllGymCentres();
+    }
+    
+    public void listAllGymOwners() {
+    	System.out.println("Listing all Gym Owners:");
     }
 }

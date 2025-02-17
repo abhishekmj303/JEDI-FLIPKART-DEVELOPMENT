@@ -1,11 +1,12 @@
 package com.flipkart.client;
 import java.util.Scanner;
 
+import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymCustomerInterface;
 import com.flipkart.business.FlipFitUserInterface;
 
 public class FlipFitGymCustomerClient {
-    public static void showGymCustomerMenu(Scanner scanner, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitUserInterface userBusiness, String email) {
+    public static void showGymCustomerMenu(Scanner scanner, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
         int choice;
         String city = null;
         do {
@@ -23,24 +24,24 @@ public class FlipFitGymCustomerClient {
                 case 1:
                     System.out.print("Enter city: ");
                     city = scanner.nextLine();
-                    gymCustomerBusiness.setPreferredCity(email, city);
+                    gymCustomerBusiness.setPreferredCity(user.getId(), city);
                     break;
                 case 2:
                 	gymCustomerBusiness.listAllCentersByCity(city);
                     System.out.println("Booking a slot...");
-                    gymCustomerBusiness.bookSlot(email, 101);
+                    gymCustomerBusiness.bookSlot(user.getId(), 101);
                     break;
                 case 3:
-                	gymCustomerBusiness.viewBookedSlots(email);
+                	gymCustomerBusiness.viewBookedSlots(user.getId());
                     break;
                 case 4:
                 	gymCustomerBusiness.cancelBooking(103);
                 	break;
                 case 5:
-                    userBusiness.updateUser(email);
+                    userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
                     break;
                 case 6:
-                    userBusiness.logout(email);
+                    userBusiness.logout(user.getEmail());
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");

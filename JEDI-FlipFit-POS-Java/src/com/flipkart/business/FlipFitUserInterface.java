@@ -3,6 +3,8 @@
  */
 package com.flipkart.business;
 
+import com.flipkart.bean.FlipFitUser;
+
 /**
  * 
  */
@@ -15,7 +17,7 @@ public interface FlipFitUserInterface {
 
     public void listAllUsers();
 
-    public boolean login(String email, String password);
+    public FlipFitUser login(String email, String password);
 
     public boolean logout(String email);
 

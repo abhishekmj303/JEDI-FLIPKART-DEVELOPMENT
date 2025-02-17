@@ -1,77 +1,74 @@
 package com.flipkart.dao;
 
-import com.flipkart.bean.FlipFitGymAdmin;
-import com.flipkart.bean.FlipFitGymOwner;
-import com.flipkart.bean.FlipFitGymCenter;
-import com.flipkart.utils.Database;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.flipkart.constant.SQLConstant;
+import com.flipkart.datasource.Database;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
-    
-    private Connection con;
 
+    private Connection connection;
+
+    // Constructor initializes the database connection once
     public FlipFitGymAdminDaoImpl() {
-        this.con = Database.getInstance().getConnection();
-    }
-
-    @Override
-    public void addGymAdmin(FlipFitGymAdmin admin) {
-        String query = "INSERT INTO gym_admins (user_id, name, email, password) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = con.prepareStatement(query)) {
-            stmt.setInt(1, admin.getUserId());
-            stmt.setString(2, admin.getName());
-            stmt.setString(3, admin.getEmail());
-            stmt.setString(4, admin.getPassword());
-            stmt.executeUpdate();
-            System.out.println("Gym admin added: " + admin.getName() + " (ID: " + admin.getUserId() + ")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Database.getInstance();
+		this.connection = Database.getConnection();
     }
 
     @Override
     public boolean approveGymOwner(int ownerId) {
-        String query = "UPDATE gym_owners SET approved = TRUE WHERE owner_id = ?";
-        try (PreparedStatement stmt = con.prepareStatement(query)) {
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_OWNER;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, ownerId);
             int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean approveGymCentre(int centreId) {
-        String query = "UPDATE gym_centres SET approved = TRUE WHERE centre_id = ?";
-        try (PreparedStatement stmt = con.prepareStatement(query)) {
-            stmt.setInt(1, centreId);
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public List<FlipFitGymCenter> listAllGymCentres() {
-        List<FlipFitGymCenter> centres = new ArrayList<>();
-        String query = "SELECT centre_id, name FROM gym_centres";
-        try (PreparedStatement stmt = con.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                int id = rs.getInt("centre_id");
-                String name = rs.getString("name");
-                centres.add(new FlipFitGymCenter(id, name));
+            if (rowsUpdated > 0) {
+                System.out.println("Gym owner approved with ID: " + ownerId);
+                return true;
+            } else {
+                System.out.println("Gym owner ID not found: " + ownerId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return centres;
+        return false;
+    }
+
+    @Override
+    public boolean approveGymCentre(int centreId) {
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, centreId);
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Gym center approved with ID: " + centreId);
+                return true;
+            } else {
+                System.out.println("Gym center ID not found: " + centreId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void listAllGymCentres() {
+        String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            System.out.println("Listing all Gym Centres:");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+
+                System.out.println("Center ID: " + id + " | Name: " + name + " | Address: " + address + " | City: " + city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

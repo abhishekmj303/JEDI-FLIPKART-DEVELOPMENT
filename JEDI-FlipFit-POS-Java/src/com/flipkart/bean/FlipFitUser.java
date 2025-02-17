@@ -84,4 +84,5 @@ public class FlipFitUser {
         this.password = password;
         this.roleId = roleId;
     }
+	
 }

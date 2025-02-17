@@ -2,11 +2,12 @@ package com.flipkart.client;
 
 import java.util.Scanner;
 
+import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymOwnerInterface;
 import com.flipkart.business.FlipFitUserInterface;
 
 public class FlipFitGymOwnerClient {
-    public static void showGymOwnerMenu(Scanner scanner, FlipFitGymOwnerInterface gymOwnerBusiness, FlipFitUserInterface userBusiness, String email) {
+    public static void showGymOwnerMenu(Scanner scanner, FlipFitGymOwnerInterface gymOwnerBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
         int choice;
         do {
             System.out.println("\n===== Gym Owner Menu =====");
@@ -19,16 +20,16 @@ public class FlipFitGymOwnerClient {
             
             switch (choice) {
                 case 1:
-                    gymOwnerBusiness.addCenterAndSlot(email);
+                    gymOwnerBusiness.addCenterAndSlot(user.getEmail());
                     break;
                 case 2:
                     gymOwnerBusiness.viewSlotsStatus();
                     break;
                 case 3:
-                	userBusiness.updateUser(email);
+                	userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
                 	break;
                 case 4:
-                    userBusiness.logout(email);
+                    userBusiness.logout(user.getEmail());
                     break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
