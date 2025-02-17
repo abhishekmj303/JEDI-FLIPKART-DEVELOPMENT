@@ -1,5 +1,6 @@
 package com.flipkart.client;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import com.flipkart.bean.FlipFitUser;
@@ -93,6 +94,8 @@ public class FlipFitApplication {
         if (user == null) {
         	return;
         }
+        
+        System.out.println("User " + email + " Logged in at " + LocalDateTime.now());
 
         // In a real application, you would validate email, password, and role.
         // Here we assume they are correct and simply delegate to the respective menu.

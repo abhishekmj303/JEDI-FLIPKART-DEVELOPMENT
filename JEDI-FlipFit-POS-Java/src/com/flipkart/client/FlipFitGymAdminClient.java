@@ -26,13 +26,14 @@ public class FlipFitGymAdminClient {
             		break;
             	case 2:
             		adminBusiness.listAllGymOwners();
+            		break;
                 case 3:
                 	adminBusiness.approveGymCentre(101);
                     break;
                 case 4:
                 	adminBusiness.listAllGymCentres();
                     break;
-                case 4:
+                case 5:
                 	userBusiness.updateUser(user.getId());
                 	break;
                 case 6:
