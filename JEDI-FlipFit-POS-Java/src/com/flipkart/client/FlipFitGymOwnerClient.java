@@ -23,7 +23,7 @@ public class FlipFitGymOwnerClient {
                     gymOwnerBusiness.addCenterAndSlot(user.getId());
                     break;
                 case 2:
-                    gymOwnerBusiness.viewSlotsStatus();
+                    gymOwnerBusiness.viewAllCenters(user.getId());
                     break;
                 case 3:
                 	userBusiness.updateUser(user.getId());

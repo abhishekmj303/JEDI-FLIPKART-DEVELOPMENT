@@ -71,4 +71,24 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
             e.printStackTrace();
         }
     }
+    
+    public void listAllGymOwners() {
+    	String query = SQLConstant.FLIPFIT_FETCH_ALL_GYM_OWNERS;
+    	try (PreparedStatement stmt = connection.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
+               System.out.println("Listing all Gym Owners:");
+               while (rs.next()) {
+                   int id = rs.getInt("id");
+                   String name = rs.getString("name");
+                   String email = rs.getString("email");
+                   String aadhaarId = rs.getString("aadhaarId");
+                   String pan = rs.getString("pan");
+                   String phoneNo = rs.getString("phoneNo");
+
+                   System.out.println("GymOwner ID: " + id + " | Name: " + name + " | Email: " + email + " | AadhaarId: " + aadhaarId + " | PAN: " + pan + " | PhoneNo: " + phoneNo);
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+    }
 }

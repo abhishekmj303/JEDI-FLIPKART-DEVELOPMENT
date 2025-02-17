@@ -9,16 +9,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.List;
 
 public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
     private Connection connection;
-    private int centreId;
 
     public FlipFitGymOwnerDaoImpl() {
         Database.getInstance();
 		this.connection = Database.getConnection();
-        this.centreId = 1;
     }
 
     @Override
@@ -37,9 +36,6 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
     }
 
     @Override
-
-
-
     public int addCenterDAO(int ownerId, String centreName, String city, String address, int seatsPerHour, 
                             String startTimeMorning, String endTimeMorning, String startTimeEvening, String endTimeEvening) {
         
@@ -48,7 +44,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             
             // Convert time strings into LocalTime
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a").withLocale(Locale.US);
             LocalTime morningStart = LocalTime.parse(startTimeMorning, timeFormatter);
             LocalTime morningEnd = LocalTime.parse(endTimeMorning, timeFormatter);
             LocalTime eveningStart = LocalTime.parse(startTimeEvening, timeFormatter);
@@ -86,15 +82,19 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
 
 
     @Override
-    public void addSlot(int centerId, List<String> startTimes, List<String> endTimes) {
-        String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
-        int defaultCapacity = 10;
+    public void addSlot(int centerId, List<String> morningTimes, List<String> eveningTimes, int availableSeats) {
+        String sql = SQLConstant.FLIPFIT_ADD_SLOT;
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (int i = 0; i < startTimes.size(); i++) {
+            for (int i = 0; i < morningTimes.size(); i++) {
                 statement.setInt(1, centerId);
-                statement.setString(2, startTimes.get(i));
-                statement.setString(3, endTimes.get(i));
-                statement.setInt(4, defaultCapacity);
+                statement.setString(2, morningTimes.get(i));
+                statement.setInt(3, availableSeats);
+                statement.executeUpdate();
+            }
+            for (int i = 0; i < eveningTimes.size(); i++) {
+                statement.setInt(1, centerId);
+                statement.setString(2, eveningTimes.get(i));
+                statement.setInt(3, availableSeats);
                 statement.executeUpdate();
             }
             System.out.println("Slots added successfully.");
@@ -134,6 +134,24 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
                 if (eveningStart != null && eveningEnd != null) {
                     System.out.println("  ➝ Evening Slot: " + eveningStart + " - " + eveningEnd);
                 }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void listAllGymCentres(int ownerId) {
+        String query = SQLConstant.FLIPFIT_FETCH_GYM_CENTRES_BY_OWNER;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, ownerId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+
+                System.out.println("Center ID: " + id + " | Name: " + name + " | Address: " + address + " | City: " + city);
             }
         } catch (SQLException e) {
             e.printStackTrace();

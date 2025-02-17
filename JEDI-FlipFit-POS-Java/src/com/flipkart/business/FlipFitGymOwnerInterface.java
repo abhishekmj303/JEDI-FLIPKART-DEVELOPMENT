@@ -25,4 +25,6 @@ public interface FlipFitGymOwnerInterface {
      * Views the status of all available and booked slots for the gym center.
      */
     public void viewSlotsStatus();
+    
+    public void viewAllCenters(int ownerId);
 }

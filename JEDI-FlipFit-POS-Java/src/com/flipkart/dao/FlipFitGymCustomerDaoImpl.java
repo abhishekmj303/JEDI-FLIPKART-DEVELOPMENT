@@ -9,8 +9,10 @@ import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitSlot;
 import com.flipkart.bean.FlipFitSlotBooking;
 import com.flipkart.datasource.Database;
+import com.mysql.cj.xdevapi.PreparableStatement;
 import com.flipkart.constant.SQLConstant;
 
 public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
@@ -54,11 +56,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     public int bookSlot(FlipFitSlotBooking booking) {
         String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
-        int bookingId = -1; 
+        int bookingId = -1;
         
         int existingBookingId = checkPrevSlot(booking.getCustomerId(), booking.getDateTime().toLocalDate());
         if (existingBookingId != 0) {
             cancelBooking(existingBookingId);
+            refundPayment(existingBookingId);
         }
     
         try {
@@ -87,7 +90,22 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
         return bookingId;
     }
     
-    
+    public boolean updateAvailableSeats(int slotId, int availableSeats) {
+    	try (PreparedStatement stmt = connection.prepareStatement(SQLConstant.FLIPFIT_UPDATE_AVAILABLE_SEATS)) {
+    		stmt.setInt(1, availableSeats);
+    		stmt.setInt(2, slotId);
+    		int rows = stmt.executeUpdate();
+    		if (rows > 0) {
+                System.out.println("Update available seats for Slot ID: " + slotId);
+                return true;
+            } else {
+                System.out.println("No slot found with ID: " + slotId);
+            }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
     
 
     // 4. Cancel a Booking (delete from slotBooking table)
@@ -163,7 +181,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                     endTimeEvening);
                     
             centers.add(center);
-            System.out.println(index + ". " + center);
+            System.out.println(index + ". " + center.getName() + ": " + center.getAddress());
             index++;
         }
     } catch (SQLException e) {
@@ -176,7 +194,9 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     
 
     // 6. View Available Slots for a given Gym Center (query slot table)
-    public void viewAvailableSlots(int gymCenterId) {
+    public List<FlipFitSlot> viewAvailableSlots(int gymCenterId) {
+    	List<FlipFitSlot> slots = new ArrayList<>();
+    	
         String sql = SQLConstant.FLIPFIT_FETCH_SLOTS_BY_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, gymCenterId);
@@ -186,11 +206,15 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
                 int slotId = rs.getInt("id");
                 String slotInfo = rs.getString("slotInfo");
                 int availableSeats = rs.getInt("availableSeats");
-                System.out.println("Slot ID: " + slotId + ", Slot Info: " + slotInfo + ", Available Seats: " + availableSeats);
+                
+                FlipFitSlot slot = new FlipFitSlot(slotId, gymCenterId, slotInfo, availableSeats);
+                slots.add(slot);
+                //System.out.println("Slot ID: " + slotId + ", Slot Info: " + slotInfo + ", Available Seats: " + availableSeats);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return slots;
     }
 
     // 7. View Booked Slots for a given customer (query slotBooking table)
@@ -225,7 +249,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("Payment successfully processed: " + payment);
+                System.out.println("Payment successfully processed: Rs." + payment.getAmount());
             } else {
                 System.out.println("Error: Payment failed.");
             }
@@ -235,16 +259,16 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     }
 
     // 9. Refund Payment (update payment table)
-    public boolean refundPayment(int paymentId) {
+    public boolean refundPayment(int bookingId) {
         String sql = SQLConstant.FLIPFIT_REFUND_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, paymentId);
+            stmt.setInt(1, bookingId);
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                System.out.println("Refunded payment with ID: " + paymentId);
+                System.out.println("Refunded payment for Booking ID: " + bookingId);
                 return true;
             } else {
-                System.out.println("Payment with ID " + paymentId + " not found for refund.");
+                System.out.println("Payment for Booking ID " + bookingId + " not found for refund.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -284,7 +308,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
             }
             stmt.setBoolean(4, notification.isRead());
             stmt.executeUpdate();
-            System.out.println("Notification sent: " + notification);
+            System.out.println("Notification sent: " + notification.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -310,7 +334,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     public int checkPrevSlot(int userId, LocalDate date) {
         String sql = SQLConstant.FLIPFIT_CHECK_SLOT;
-        //"SELECT booking_id FROM bookings WHERE customer_id = ? AND DATE(datetime) = ?"
+        //"SELECT booking_id FROM bookings WHERE customer_id = ? AND DATE(date) = ?"
         int bookingId = 0;
     
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -319,13 +343,13 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    bookingId = rs.getInt("booking_id");
+                    bookingId = rs.getInt("id");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(bookingId != 0) System.out.println("Booking already found with booking ID" + bookingId );
+        if(bookingId != 0) System.out.println("Booking already found with booking ID " + bookingId );
         return bookingId;
     }
 

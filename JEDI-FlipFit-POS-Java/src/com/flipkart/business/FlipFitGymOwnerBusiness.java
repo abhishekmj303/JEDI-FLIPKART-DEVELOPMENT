@@ -52,16 +52,16 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
 
         // Taking input for start & end times
         System.out.print("Enter Morning Session Start Time (HH:MM): ");
-        String startTimeMorning = sc.nextLine();
+        String startTimeMorning = sc.nextLine() + " AM";
 
         System.out.print("Enter Morning Session End Time (HH:MM): ");
-        String endTimeMorning = sc.nextLine();
+        String endTimeMorning = sc.nextLine() + " AM";
 
         System.out.print("Enter Evening Session Start Time (HH:MM): ");
-        String startTimeEvening = sc.nextLine();
+        String startTimeEvening = sc.nextLine() + " PM";
 
         System.out.print("Enter Evening Session End Time (HH:MM): ");
-        String endTimeEvening = sc.nextLine();
+        String endTimeEvening = sc.nextLine() + " PM";
 
         int centerId = gymOwnerDao.addCenterDAO(ownerId, centreName, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening);
 
@@ -76,7 +76,12 @@ public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
 
         System.out.println("Generated Morning Slots: " + morningSlots);
         System.out.println("Generated Evening Slots: " + eveningSlots);
-        gymOwnerDao.addSlot(centerId, morningSlots, eveningSlots);
+        gymOwnerDao.addSlot(centerId, morningSlots, eveningSlots, seatsPerHour);
+    }
+    
+    public void viewAllCenters(int ownerId) {
+        System.out.println("Listing all Gym Centers for Owner Id: " + ownerId);
+        gymOwnerDao.listAllGymCentres(ownerId);
     }
 
     public void viewSlotsStatus() {

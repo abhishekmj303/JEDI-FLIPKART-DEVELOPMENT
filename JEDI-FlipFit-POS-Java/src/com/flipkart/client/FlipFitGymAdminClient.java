@@ -22,13 +22,13 @@ public class FlipFitGymAdminClient {
             
             switch (choice) {
             	case 1:
-            		adminBusiness.approveGymOwner(201);
+            		adminBusiness.approveGymOwner();
             		break;
             	case 2:
             		adminBusiness.listAllGymOwners();
             		break;
                 case 3:
-                	adminBusiness.approveGymCentre(101);
+                	adminBusiness.approveGymCentre();
                     break;
                 case 4:
                 	adminBusiness.listAllGymCentres();

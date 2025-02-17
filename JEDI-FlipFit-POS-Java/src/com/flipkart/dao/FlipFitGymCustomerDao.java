@@ -6,6 +6,7 @@ import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitSlot;
 import com.flipkart.bean.FlipFitSlotBooking;
 
 /**
@@ -57,7 +58,7 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param gymCenterId The ID of the gym center for which the available slots are to be viewed.
      */
-    public void viewAvailableSlots(int gymCenterId);
+    public List<FlipFitSlot> viewAvailableSlots(int gymCenterId);
 
     /**
      * Views the slots booked by a gym customer.
@@ -97,4 +98,6 @@ public interface FlipFitGymCustomerDao {
     public void sendNotification(FlipFitNotification notification);
 
     public List<String> getAllCities();
+    
+    public boolean updateAvailableSeats(int slotId, int availableSeats);
 }

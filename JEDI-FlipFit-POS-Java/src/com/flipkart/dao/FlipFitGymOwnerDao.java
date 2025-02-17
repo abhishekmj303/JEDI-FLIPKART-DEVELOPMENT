@@ -43,10 +43,12 @@ public interface FlipFitGymOwnerDao {
      * @param startTimes A list of start times for the available slots.
      * @param endTimes A list of end times for the available slots.
      */
-    public void addSlot(int centerId, List<String> startTimes, List<String> endTimes);
+    public void addSlot(int centerId, List<String> startTimes, List<String> endTimes, int availableSeats);
 
     /**
      * Views the status of the slots at all gym centers.
      */
     public void viewSlotsStatusDAO();
+    
+    public void listAllGymCentres(int ownerId);
 }

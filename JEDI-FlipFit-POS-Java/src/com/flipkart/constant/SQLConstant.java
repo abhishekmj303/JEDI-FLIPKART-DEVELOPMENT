@@ -13,14 +13,14 @@ public class SQLConstant {
     public static final String FLIPFIT_UPDATE_USER = "UPDATE user SET name = ? WHERE id = ?";
     public static final String FLIPFIT_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE email = ? AND password = ?";
     public static final String FLIPFIT_DELETE_USER = "DELETE FROM user WHERE email = ?";
-    public static final String FLIPFIT_CHECK_SLOT = "SELECT booking_id FROM bookings WHERE customer_id = ? AND DATE(datetime) = ?";
+    public static final String FLIPFIT_CHECK_SLOT = "SELECT id FROM slotBooking WHERE customerId = ? AND DATE(date) = ? AND isConfirmed = 1";
     //------------------- ROLE QUERIES ---------------------
     public static final String FLIPFIT_FETCH_ALL_ROLES = "SELECT * FROM role";
     public static final String FLIPFIT_FETCH_ROLE_BY_ID = "SELECT * FROM role WHERE id = ?";
 
     //------------------- GYM OWNER QUERIES ---------------------
     public static final String FLIPFIT_REGISTER_GYM_OWNER = "INSERT INTO gymOwner (id, AadhaarId, PAN, phoneNo) VALUES (?, ?, ?, ?)";
-    public static final String FLIPFIT_FETCH_ALL_GYM_OWNERS = "SELECT * FROM gymOwner";
+    public static final String FLIPFIT_FETCH_ALL_GYM_OWNERS = "SELECT * FROM gymOwner JOIN user ON gymOwner.id = user.id;";
     public static final String FLIPFIT_FETCH_PENDING_GYM_OWNERS = "SELECT * FROM gymOwner WHERE isApproved = 0";
     public static final String FLIPFIT_APPROVE_GYM_OWNER = "UPDATE gymOwner SET isApproved = 1 WHERE id = ?";
 
@@ -43,18 +43,19 @@ public class SQLConstant {
     //------------------- SLOT QUERIES ---------------------
     public static final String FLIPFIT_FETCH_ALL_SLOTS = "SELECT * FROM slot";
     public static final String FLIPFIT_FETCH_SLOTS_BY_CENTRE = "SELECT * FROM slot WHERE centerId = ?";
-    public static final String FLIPFIT_ADD_SLOT = "INSERT INTO slot (id, centerId, slotInfo, availableSeats) VALUES (?, ?, ?, ?)";
+    public static final String FLIPFIT_ADD_SLOT = "INSERT INTO slot (centerId, slotInfo, availableSeats) VALUES (?, ?, ?)";
     public static final String FLIPFIT_FETCH_SLOT_BY_ID = "SELECT * FROM slot WHERE id = ?";
+    public static final String FLIPFIT_UPDATE_AVAILABLE_SEATS = "UPDATE slot SET availableSeats = ? WHERE id = ?";
 
     //------------------- SLOT BOOKING QUERIES ---------------------
     public static final String FLIPFIT_BOOK_SLOT = "INSERT INTO slotBooking (slotId, customerId, date) VALUES (?, ?, ?)";
-    public static final String FLIPFIT_FETCH_BOOKINGS_BY_CUSTOMER = "SELECT * FROM slotBooking WHERE customerId = ?";
-    public static final String FLIPFIT_CANCEL_BOOKING = "DELETE FROM slotBooking WHERE id = ?";
+    public static final String FLIPFIT_FETCH_BOOKINGS_BY_CUSTOMER = "SELECT * FROM slotBooking WHERE customerId = ? AND isConfirmed = 1";
+    public static final String FLIPFIT_CANCEL_BOOKING = "UPDATE slotBooking SET isConfirmed = 0 WHERE id = ?";
 
     //------------------- PAYMENT QUERIES ---------------------
     public static final String FLIPFIT_PROCESS_PAYMENT = "INSERT INTO payment (customerId, bookingId, amount, status, paymentMethod, transactionDate) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String FLIPFIT_FETCH_PAYMENT_STATUS = "SELECT status FROM payment WHERE id = ?";
-    public static final String FLIPFIT_REFUND_PAYMENT = "UPDATE payment SET status = 'Refunded' WHERE id = ?";
+    public static final String FLIPFIT_REFUND_PAYMENT = "UPDATE payment SET status = 'Refunded' WHERE bookingId = ? AND status = 'Completed'";
 
     //------------------- NOTIFICATION QUERIES ---------------------
     public static final String FLIPFIT_SEND_NOTIFICATION = "INSERT INTO notification (userId, message, dateTime, isRead) VALUES (?, ?, ?, ?)";

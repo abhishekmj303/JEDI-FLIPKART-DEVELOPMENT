@@ -27,4 +27,9 @@ public interface FlipFitGymAdminDao {
      * Lists all the gym centers in the system.
      */
     public void listAllGymCentres();
+    
+    /**
+     * Lists all the gym owners in the system.
+     */
+    public void listAllGymOwners();
 }

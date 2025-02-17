@@ -17,7 +17,7 @@ public class SlotGenerator {
 
     public List<String> generateSlots(String startTime, String endTime) {
         List<String> slots = new ArrayList<>();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
 
         try {
             Date start = timeFormat.parse(startTime);

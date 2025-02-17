@@ -4,6 +4,7 @@ import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
+import com.flipkart.bean.FlipFitSlot;
 import com.flipkart.bean.FlipFitSlotBooking;
 import com.flipkart.dao.FlipFitGymCustomerDao;
 import com.flipkart.dao.FlipFitGymCustomerDaoImpl;
@@ -82,20 +83,45 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     }
     
     FlipFitGymCenter selectedCenter = centers.get(choice - 1);
-    System.out.println("You selected: " + selectedCenter);
-    gymCustomerDao.viewAvailableSlots(selectedCenter.getId());
-    System.out.println("Enter the slot ID you wish to book:");
-    int slotId;
+    System.out.println("You selected: " + selectedCenter.getName() + ", " + selectedCenter.getAddress());
+    List<FlipFitSlot> slots = gymCustomerDao.viewAvailableSlots(selectedCenter.getId());
+    
+    System.out.println("Available Slots:");
+    for (int i = 0; i < slots.size(); i++) {
+        System.out.println((i + 1) + ". " + slots.get(i).getSlotInfo() + " - " + slots.get(i).getAvailableSeats() + " seats available");
+    }
+    
+    System.out.println("Please enter the number corresponding to the slot you want to book:");
+    choice = -1;
     while (true) {
         try {
-            slotId = Integer.parseInt(scanner.nextLine());
-            break;
+            choice = Integer.parseInt(scanner.nextLine());
+            if (choice < 1 || choice > slots.size()) {
+                System.out.println("Invalid selection. Please enter a number between 1 and " + slots.size() + ":");
+            } else {
+                break;
+            }
         } catch (NumberFormatException e) {
             System.out.println("Invalid slot ID. Please enter a valid number:");
         }
     }
+    
+    FlipFitSlot selectedSlot = slots.get(choice-1);
+    int slotId = selectedSlot.getId();
+    
+    if (selectedSlot.getAvailableSeats() <= 0) {
+    	System.out.println("No available seats in the selected slot");
+    	sendNotification(userId, "Booking failed for slot " + slotId);
+    	return;
+    }
     FlipFitSlotBooking booking = new FlipFitSlotBooking(selectedCenter.getId(), slotId, userId, LocalDateTime.now());
     int bookingId = gymCustomerDao.bookSlot(booking);
+    if (bookingId == -1) {
+    	sendNotification(userId, "Booking failed for slot " + slotId);
+    	return;
+    }
+    
+    gymCustomerDao.updateAvailableSeats(slotId, selectedSlot.getAvailableSeats()-1);
     
     System.out.println("Proceeding to payment...");
     processPayment(userId, bookingId, 1000);
