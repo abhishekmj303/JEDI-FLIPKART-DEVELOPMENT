@@ -17,6 +17,7 @@ public interface FlipFitGymOwnerDao {
      * @param phoneNo The phone number of the gym owner.
      */
     public void addGymOwnerDAO(int userId, String aadhaarNo, String pan, String phoneNo);
+<<<<<<< HEAD
 
     /**
      * Adds a new gym center to the system and associates it with the gym owner.
@@ -35,6 +36,10 @@ public interface FlipFitGymOwnerDao {
      * @param startTimes A list of start times for the slots.
      * @param endTimes A list of end times for the slots.
      */
+=======
+    public int addCenterDAO(int ownerId, String centreName, String city, String address, int seatsPerHour, 
+            String startTimeMorning, String endTimeMorning, String startTimeEvening, String endTimeEvening);
+>>>>>>> 2b379df129282e95fc550c917e3596d9a689a9bc
     public void addSlot(int centerId, List<String> startTimes, List<String> endTimes);
 
     /**

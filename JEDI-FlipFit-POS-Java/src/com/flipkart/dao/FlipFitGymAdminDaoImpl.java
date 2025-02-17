@@ -55,7 +55,7 @@ public class FlipFitGymAdminDaoImpl implements FlipFitGymAdminDao {
 
     @Override
     public void listAllGymCentres() {
-        String query = SQLConstant.FLIPFIT_APPROVE_GYM_CENTRE;
+        String query = SQLConstant.FLIPFIT_FETCH_ALL_GYM_CENTRES;
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             System.out.println("Listing all Gym Centres:");

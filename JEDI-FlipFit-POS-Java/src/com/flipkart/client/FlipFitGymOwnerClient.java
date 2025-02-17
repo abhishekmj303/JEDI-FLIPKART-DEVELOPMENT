@@ -20,7 +20,7 @@ public class FlipFitGymOwnerClient {
             
             switch (choice) {
                 case 1:
-                    gymOwnerBusiness.addCenterAndSlot(user.getEmail());
+                    gymOwnerBusiness.addCenterAndSlot(user.getId());
                     break;
                 case 2:
                     gymOwnerBusiness.viewSlotsStatus();
