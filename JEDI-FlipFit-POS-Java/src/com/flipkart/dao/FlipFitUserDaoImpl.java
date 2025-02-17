@@ -8,6 +8,7 @@ import com.flipkart.constant.SQLConstant;
 import com.flipkart.datasource.Database;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class FlipFitUserDaoImpl implements FlipFitUserDao {
 
@@ -39,18 +40,21 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
         return -1;
     }
 
-    public boolean updateUser(String email, String name, int roleId) {
-        String sql = SQLConstant.FLIPFIT_UPDATE_USER;
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, name);
-            stmt.setInt(2, roleId);
-            stmt.setString(3, email);
+    public boolean updateUser(int userId) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the new name for the user: ");
+        String newName = scanner.nextLine();  // Read the new name from user input
 
-            return stmt.executeUpdate() > 0;
+        String sql = SQLConstant.FLIPFIT_UPDATE_USER;  // Use the SQL constant for updating user name
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newName);  // Set the new name in the query
+            stmt.setInt(2, userId);      // Set the user ID in the query
+
+            return stmt.executeUpdate() > 0; // Return true if the update is successful
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return false; // Return false if the update failed
     }
 
     public boolean updatePassword(String email, String oldPassword, String newPassword) {

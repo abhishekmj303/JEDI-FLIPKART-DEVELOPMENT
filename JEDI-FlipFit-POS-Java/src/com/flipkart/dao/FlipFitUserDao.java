@@ -9,7 +9,7 @@ public interface FlipFitUserDao {
 
     public int addUser(FlipFitUser user);
     
-    public boolean updateUser(String email, String name, int roleId);
+    public boolean updateUser(int userId);
     
     public boolean updatePassword(String email, String oldPassword, String newPassword);
     

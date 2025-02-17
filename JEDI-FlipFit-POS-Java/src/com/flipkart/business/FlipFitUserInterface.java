@@ -11,7 +11,7 @@ import com.flipkart.bean.FlipFitUser;
 public interface FlipFitUserInterface {
 	public int addUser(String name, String email, String password, int roleId);
 
-    public boolean updateUser(String email, String name, int roleId) ;
+    public boolean updateUser(int userId);
 
 	public boolean updatePassword(String email, String oldPassword, String newPassword);
 

@@ -22,12 +22,12 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
         return userId;
     }
 
-    public boolean updateUser(String email, String name, int roleId) {
-        if (userDao.updateUser(email, name, roleId)) {
-            System.out.println("User updated: " + email);
+    public boolean updateUser(int userId) {
+        if (userDao.updateUser(userId)) {
+            System.out.println("User name updated !!");
             return true;
         }
-        System.out.println("User not found: " + email);
+        System.out.println("User not found: " + userId);
         return false;
     }
 

@@ -38,7 +38,7 @@ public class FlipFitGymCustomerClient {
                 	gymCustomerBusiness.cancelBooking(103);
                 	break;
                 case 5:
-                    userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
+                    userBusiness.updateUser(user.getId());
                     break;
                 case 6:
                     userBusiness.logout(user.getEmail());

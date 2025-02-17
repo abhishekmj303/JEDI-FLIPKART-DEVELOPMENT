@@ -10,7 +10,7 @@ public class SQLConstant {
     public static final String FLIPFIT_FETCH_ALL_USERS = "SELECT * FROM user";
     public static final String FLIPFIT_LOGIN = "SELECT * FROM user WHERE email = ? AND password = ?";
     public static final String FLIPFIT_FETCH_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
-    public static final String FLIPFIT_UPDATE_USER = "UPDATE user SET name = ?, roleId = ? WHERE email = ?";
+    public static final String FLIPFIT_UPDATE_USER = "UPDATE user SET name = ? WHERE id = ?";
     public static final String FLIPFIT_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE email = ? AND password = ?";
     public static final String FLIPFIT_DELETE_USER = "DELETE FROM user WHERE email = ?";
 
@@ -25,7 +25,7 @@ public class SQLConstant {
     public static final String FLIPFIT_APPROVE_GYM_OWNER = "UPDATE gymOwner SET isApproved = 1 WHERE id = ?";
 
     //------------------- GYM CENTER QUERIES ---------------------
-    public static final String FLIPFIT_ADD_GYM_CENTRE = "INSERT INTO gymCenter (id, name, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening, isApproved, gymOwnerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String FLIPFIT_ADD_GYM_CENTRE = "INSERT INTO gymCenter (gymOwnerId, name, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening, isApproved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String FLIPFIT_FETCH_ALL_GYM_CENTRES = "SELECT * FROM gymCenter";
     public static final String FLIPFIT_FETCH_GYM_CENTRES_BY_OWNER = "SELECT * FROM gymCenter WHERE gymOwnerId = ?";
     public static final String FLIPFIT_FETCH_GYM_CENTRES_BY_CITY = "SELECT * FROM gymCenter WHERE city = ?";

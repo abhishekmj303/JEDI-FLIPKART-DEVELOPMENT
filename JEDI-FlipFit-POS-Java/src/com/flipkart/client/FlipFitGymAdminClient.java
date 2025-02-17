@@ -32,8 +32,8 @@ public class FlipFitGymAdminClient {
                 case 4:
                 	adminBusiness.listAllGymCentres();
                     break;
-                case 5:
-                	userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());
+                case 4:
+                	userBusiness.updateUser(user.getId());
                 	break;
                 case 6:
                 	userBusiness.logout(user.getEmail());
