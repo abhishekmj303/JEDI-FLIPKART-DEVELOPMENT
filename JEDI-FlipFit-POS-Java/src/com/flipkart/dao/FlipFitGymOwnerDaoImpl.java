@@ -3,9 +3,12 @@ package com.flipkart.dao;
 import com.flipkart.datasource.Database;
 import com.flipkart.constant.SQLConstant;
 import java.sql.Connection;
+import java.sql.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
@@ -34,20 +37,45 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
     }
 
     @Override
-    public int addCenterDAO(int ownerId, String centre, String location) {
+
+
+
+    public int addCenterDAO(int ownerId, String centreName, String city, String address, int seatsPerHour, 
+                            String startTimeMorning, String endTimeMorning, String startTimeEvening, String endTimeEvening) {
+        
         String sql = SQLConstant.FLIPFIT_ADD_GYM_CENTRE;
+        
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            // Convert time strings into LocalTime
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime morningStart = LocalTime.parse(startTimeMorning, timeFormatter);
+            LocalTime morningEnd = LocalTime.parse(endTimeMorning, timeFormatter);
+            LocalTime eveningStart = LocalTime.parse(startTimeEvening, timeFormatter);
+            LocalTime eveningEnd = LocalTime.parse(endTimeEvening, timeFormatter);
+
+            // Set parameters
             statement.setInt(1, ownerId);
-            statement.setString(2, centre);
-            statement.setString(3, location);
+            statement.setString(2, centreName);
+            statement.setString(3, address);
+            statement.setString(4, city);
+            statement.setInt(5, seatsPerHour);
+            statement.setTime(6, Time.valueOf(morningStart));
+            statement.setTime(7, Time.valueOf(morningEnd));
+            statement.setTime(8, Time.valueOf(eveningStart));
+            statement.setTime(9, Time.valueOf(eveningEnd));
+            statement.setInt(10, 0); // isApproved default 0
+            statement.setInt(11, ownerId);
+
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Adding GymCenter failed, no rows affected.");
             }
+
+            // Get generated centre ID
             try (ResultSet rs = statement.getGeneratedKeys()) {
                 if (rs.next()) {
-                    centreId++;
-                    return centreId;
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
@@ -55,6 +83,7 @@ public class FlipFitGymOwnerDaoImpl implements FlipFitGymOwnerDao {
         }
         return -1;
     }
+
 
     @Override
     public void addSlot(int centerId, List<String> startTimes, List<String> endTimes) {

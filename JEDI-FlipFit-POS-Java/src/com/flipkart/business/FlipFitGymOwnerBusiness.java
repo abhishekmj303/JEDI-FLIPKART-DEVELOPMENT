@@ -4,79 +4,83 @@ import com.flipkart.helper.SlotGenerator;
 import com.flipkart.dao.FlipFitGymOwnerDao;
 import com.flipkart.dao.FlipFitGymOwnerDaoImpl;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 public class FlipFitGymOwnerBusiness implements FlipFitGymOwnerInterface {
-    private static final int START_TIME_MORNING = 6;
-    private static final int END_TIME_MORNING = 14;
-    private static final int START_TIME_EVENING = 10;
-    private static final int END_TIME_EVENING = 18;
 
     private final SlotGenerator slotGenerator;
     private final FlipFitGymOwnerDao gymOwnerDao;
+    private final Scanner sc;
 
     public FlipFitGymOwnerBusiness() {
         this.slotGenerator = new SlotGenerator();
         this.gymOwnerDao = new FlipFitGymOwnerDaoImpl();
+        this.sc = new Scanner(System.in); // Scanner declared globally to prevent resource leaks
     }
 
-    public void addGymOwner(int userId, String aadhaarNo, String pan, String phoneNo) {
-        System.out.println("Adding a gym owner with ID: " + userId);
+    public void addGymOwner(int userId) {
+        System.out.println("Registering Gym Owner...");
+
+        System.out.print("Enter Aadhaar ID: ");
+        String aadhaarNo = sc.nextLine();
+
+        System.out.print("Enter PAN Number: ");
+        String pan = sc.nextLine();
+
+        System.out.print("Enter Phone Number: ");
+        String phoneNo = sc.nextLine();
+
         gymOwnerDao.addGymOwnerDAO(userId, aadhaarNo, pan, phoneNo);
+        System.out.println("Gym Owner Registered Successfully!");
     }
 
-	public void addCenterAndSlot(String email) {
-		System.out.println("Adding a gym center and slots for " + email);
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter your gym centre name:");
-		String centreName = sc.nextLine();
-		System.out.println("Enter your gym centre location:");
-		String location = sc.nextLine();
-	
-		int ownerId = 1;
-		int centerId = gymOwnerDao.addCenterDAO(101, centreName,location);
-		if (centerId == -1) {
-			System.out.println("Error: Failed to add Gym Center.");
-			sc.close();
-			return;
-		}
-	
-		int START_TIME_MORNING = 6;
-		int END_TIME_MORNING = 14;
-		int START_TIME_EVENING = 10;
-		int END_TIME_EVENING = 18;
-	
-		Date morningStartTime = convertToTime(START_TIME_MORNING);
-		Date morningEndTime = convertToTime(END_TIME_MORNING);
-		Date eveningStartTime = convertToTime(START_TIME_EVENING);
-		Date eveningEndTime = convertToTime(END_TIME_EVENING);
-	
-		System.out.println("Generating Slots...");
-		List<String> morningSlots = slotGenerator.generateSlots(morningStartTime, morningEndTime);
-		List<String> eveningSlots = slotGenerator.generateSlots(eveningStartTime, eveningEndTime);
-	
-		System.out.println("Generated Morning Slots: " + morningSlots);
-		System.out.println("Generated Evening Slots: " + eveningSlots);
-		gymOwnerDao.addSlot(centerId, morningSlots, eveningSlots);
-		
-		sc.close();
-	}
-	
+    public void addCenterAndSlot(int ownerId) {
+        System.out.println("Adding a Gym Center...");
+
+        System.out.print("Enter Gym Centre Name: ");
+        String centreName = sc.nextLine();
+
+        System.out.print("Enter Gym Centre Address: ");
+        String address = sc.nextLine();
+
+        System.out.print("Enter City: ");
+        String city = sc.nextLine();
+
+        System.out.print("Enter Number of Seats Available Per Hour: ");
+        int seatsPerHour = Integer.parseInt(sc.nextLine());
+
+        // Taking input for start & end times
+        System.out.print("Enter Morning Session Start Time (HH:MM): ");
+        String startTimeMorning = sc.nextLine();
+
+        System.out.print("Enter Morning Session End Time (HH:MM): ");
+        String endTimeMorning = sc.nextLine();
+
+        System.out.print("Enter Evening Session Start Time (HH:MM): ");
+        String startTimeEvening = sc.nextLine();
+
+        System.out.print("Enter Evening Session End Time (HH:MM): ");
+        String endTimeEvening = sc.nextLine();
+
+        int centerId = gymOwnerDao.addCenterDAO(ownerId, centreName, address, city, seatsPerHour, startTimeMorning, endTimeMorning, startTimeEvening, endTimeEvening);
+
+        if (centerId == -1) {
+            System.out.println("Error: Failed to add Gym Center.");
+            return;
+        }
+
+        System.out.println("Generating Slots...");
+        List<String> morningSlots = slotGenerator.generateSlots(startTimeMorning, endTimeMorning);
+        List<String> eveningSlots = slotGenerator.generateSlots(startTimeEvening, endTimeEvening);
+
+        System.out.println("Generated Morning Slots: " + morningSlots);
+        System.out.println("Generated Evening Slots: " + eveningSlots);
+        gymOwnerDao.addSlot(centerId, morningSlots, eveningSlots);
+    }
+
     public void viewSlotsStatus() {
-        System.out.println("Current Slot Status...");
+        System.out.println("Fetching Current Slot Status...");
         gymOwnerDao.viewSlotsStatusDAO();
     }
-
-    private Date convertToTime(int hour) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
 }
-
