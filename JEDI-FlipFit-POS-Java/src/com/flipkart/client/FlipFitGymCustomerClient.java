@@ -8,7 +8,7 @@ import com.flipkart.business.FlipFitUserInterface;
 public class FlipFitGymCustomerClient {
     public static void showGymCustomerMenu(Scanner scanner, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
         int choice;
-        String city = null;
+        // String city = null;
         do {
             System.out.println("\n===== Gym Customer Menu =====");
             System.out.println("1. Select a City for Gym Centres");
@@ -22,20 +22,17 @@ public class FlipFitGymCustomerClient {
             
             switch (choice) {
                 case 1:
-                    System.out.print("Enter city: ");
-                    city = scanner.nextLine();
-                    gymCustomerBusiness.setPreferredCity(user.getId(), city);
+                    gymCustomerBusiness.setPreferredCity(user.getId());
                     break;
                 case 2:
-                	gymCustomerBusiness.listAllCentersByCity(city);
                     System.out.println("Booking a slot...");
-                    gymCustomerBusiness.bookSlot(user.getId(), 101);
+                    gymCustomerBusiness.bookSlot(user.getId());
                     break;
                 case 3:
                 	gymCustomerBusiness.viewBookedSlots(user.getId());
                     break;
                 case 4:
-                	gymCustomerBusiness.cancelBooking(103);
+                	gymCustomerBusiness.cancelBooking(user.getId());
                 	break;
                 case 5:
                     userBusiness.updateUser(user.getEmail(), user.getName(), user.getRoleId());

@@ -3,6 +3,9 @@
  */
 package com.flipkart.dao;
 
+import java.util.List;
+
+import com.flipkart.bean.FlipFitGymCenter;
 import com.flipkart.bean.FlipFitGymCustomer;
 import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
@@ -17,11 +20,11 @@ public interface FlipFitGymCustomerDao {
 
     public void setPreferredCity(int userId, String city);
 
-    public void bookSlot(FlipFitSlotBooking booking);
+    public int bookSlot(FlipFitSlotBooking booking);
 
     public boolean cancelBooking(int bookingId);
 
-    public void listAllCentersByCity(String city);
+    public List<FlipFitGymCenter> listAllCentersByCity(int userId);
 
     public void viewAvailableSlots(int gymCenterId);
 
@@ -34,4 +37,6 @@ public interface FlipFitGymCustomerDao {
     public String getPaymentStatus(int paymentId);
 
     public void sendNotification(FlipFitNotification notification);
+
+    public List<String> getAllCities();
 }
