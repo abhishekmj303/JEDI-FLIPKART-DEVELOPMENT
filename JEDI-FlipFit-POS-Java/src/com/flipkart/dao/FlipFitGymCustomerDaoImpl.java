@@ -328,6 +328,5 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
         if(bookingId != 0) System.out.println("Booking already found with booking ID" + bookingId );
         return bookingId;
     }
-    
 
 }

@@ -50,7 +50,7 @@ public interface FlipFitGymCustomerDao {
      * 
      * @param city The city for which the gym centers are to be listed.
      */
-    public List<FlipFitGymCenter> listAllCentersByCity(String city);
+    public List<FlipFitGymCenter> listAllCentersByCity(int userId);
 
     /**
      * Views the available slots for a specified gym center.
