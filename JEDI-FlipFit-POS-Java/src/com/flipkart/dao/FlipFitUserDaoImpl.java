@@ -9,7 +9,7 @@ import com.flipkart.datasource.Database;
 
 import java.sql.*;
 
-public class FlipFtUserDaoImpl implements FlipFitUserDao {
+public class FlipFitUserDaoImpl implements FlipFitUserDao {
 
     private Connection connection;
 
