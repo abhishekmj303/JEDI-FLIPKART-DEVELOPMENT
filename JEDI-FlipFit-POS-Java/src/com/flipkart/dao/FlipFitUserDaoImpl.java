@@ -9,7 +9,7 @@ import com.flipkart.datasource.Database;
 
 import java.sql.*;
 
-public class FlipFitUserDaoImpl implements FlipFitUserDao {
+public class FlipFtUserDaoImpl implements FlipFitUserDao {
 
     private Connection connection;
 
@@ -19,7 +19,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
     }
 
     public int addUser(FlipFitUser user) {
-        try (PreparedStatement stmt = connection.prepareStatement(SQLConstant.FLIPFIT_SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(SQLConstant.FLIPFIT_ADD_USER, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, user.getId());
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getEmail());
@@ -40,7 +40,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
     }
 
     public boolean updateUser(String email, String name, int roleId) {
-        String sql = "UPDATE user SET name = ?, roleId = ? WHERE email = ?";
+        String sql = SQLConstant.FLIPFIT_UPDATE_USER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, name);
             stmt.setInt(2, roleId);
@@ -54,7 +54,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
     }
 
     public boolean updatePassword(String email, String oldPassword, String newPassword) {
-        String sql = "UPDATE user SET password = ? WHERE email = ? AND password = ?";
+        String sql = SQLConstant.FLIPFIT_UPDATE_PASSWORD;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, newPassword);
             stmt.setString(2, email);
@@ -68,7 +68,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
     }
 
     public FlipFitUser getUserByEmail(String email) {
-        String sql = "SELECT * FROM user WHERE email = ?";
+        String sql = SQLConstant.FLIPFIT_FETCH_USER_BY_EMAIL;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -89,7 +89,7 @@ public class FlipFitUserDaoImpl implements FlipFitUserDao {
     }
 
     public void listAllUsers() {
-        String sql = "SELECT * FROM user";
+        String sql = SQLConstant.FLIPFIT_FETCH_ALL_USERS;
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {

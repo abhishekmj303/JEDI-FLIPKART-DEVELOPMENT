@@ -7,6 +7,7 @@ import com.flipkart.bean.FlipFitNotification;
 import com.flipkart.bean.FlipFitPayment;
 import com.flipkart.bean.FlipFitSlotBooking;
 import com.flipkart.datasource.Database;
+import com.flipkart.constant.SQLConstant;
 
 public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
@@ -14,13 +15,12 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     public FlipFitGymCustomerDaoImpl() {
         Database.getInstance();
-		// Assumes DBConnection.getConnection() returns a valid Connection.
-        connection = Database.getConnection();
+		connection = Database.getConnection();
     };
-
+    
     // 1. Add a Gym Customer (insert into gymCustomer table)
     public void addGymCustomer(FlipFitGymCustomer customer) {
-        String sql = "INSERT INTO gymCustomer (id, preferredCity) VALUES (?, ?)";
+        String sql = SQLConstant.FLIPFIT_REGISTER_GYM_CUSTOMER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, customer.getId());
             stmt.setString(2, customer.getPreferredCity());
@@ -33,7 +33,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 2. Set Preferred City for a Gym Customer
     public void setPreferredCity(int userId, String city) {
-        String sql = "UPDATE gymCustomer SET preferredCity = ? WHERE id = ?";
+        String sql = SQLConstant.FLIPFIT_UPDATE_PREFERRED_CITY;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, city);
             stmt.setInt(2, userId);
@@ -51,7 +51,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     // 3. Book a Slot (insert into slotBooking table)
     // Note: The slotBooking table schema: id, slotId, customerId, date
     public void bookSlot(FlipFitSlotBooking booking) {
-        String sql = "INSERT INTO slotBooking (id, slotId, customerId, date) VALUES (?, ?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, booking.getId());
             stmt.setInt(2, booking.getSlotId());
@@ -68,7 +68,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 4. Cancel a Booking (delete from slotBooking table)
     public boolean cancelBooking(int bookingId) {
-        String sql = "DELETE FROM slotBooking WHERE id = ?";
+        String sql = SQLConstant.FLIPFIT_CANCEL_BOOKING;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bookingId);
             int rows = stmt.executeUpdate();
@@ -86,7 +86,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 5. List All Gym Centers by City (query gymCenter table)
     public void listAllCentersByCity(String city) {
-        String sql = "SELECT * FROM gymCenter WHERE city = ?";
+        String sql = SQLConstant.FLIPFIT_FETCH_GYM_CENTRES_BY_CITY;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, city);
             ResultSet rs = stmt.executeQuery();
@@ -107,7 +107,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 6. View Available Slots for a given Gym Center (query slot table)
     public void viewAvailableSlots(int gymCenterId) {
-        String sql = "SELECT * FROM slot WHERE centerId = ?";
+        String sql = SQLConstant.FLIPFIT_FETCH_SLOTS_BY_CENTRE;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, gymCenterId);
             ResultSet rs = stmt.executeQuery();
@@ -125,7 +125,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 7. View Booked Slots for a given customer (query slotBooking table)
     public void viewBookedSlots(int userId) {
-        String sql = "SELECT * FROM slotBooking WHERE customerId = ?";
+        String sql = SQLConstant.FLIPFIT_FETCH_BOOKINGS_BY_CUSTOMER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
@@ -144,7 +144,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     // 8. Process Payment (insert into payment table)
     // Note: The payment table schema: id, customerId, bookingId, amount, status, paymentMethod, transactionDate
     public void processPayment(FlipFitPayment payment) {
-        String sql = "INSERT INTO payment (id, customerId, bookingId, amount, status, paymentMethod, transactionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_PROCESS_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, payment.getId());
             stmt.setInt(2, payment.getCustomerId());
@@ -164,7 +164,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 9. Refund Payment (update payment table)
     public boolean refundPayment(int paymentId) {
-        String sql = "UPDATE payment SET status = 'Refunded' WHERE id = ?";
+        String sql = SQLConstant.FLIPFIT_REFUND_PAYMENT;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, paymentId);
             int rows = stmt.executeUpdate();
@@ -182,7 +182,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
 
     // 10. Get Payment Status (query payment table)
     public String getPaymentStatus(int paymentId) {
-        String sql = "SELECT status FROM payment WHERE id = ?";
+        String sql = SQLConstant.FLIPFIT_FETCH_PAYMENT_STATUS;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, paymentId);
             ResultSet rs = stmt.executeQuery();
@@ -200,7 +200,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     // 11. Send Notification (insert into notification table)
     // Note: The notification table schema: id, userId, message, dateTime, isRead
     public void sendNotification(FlipFitNotification notification) {
-        String sql = "INSERT INTO notification (id, userId, message, dateTime, isRead) VALUES (?, ?, ?, ?, ?)";
+        String sql = SQLConstant.FLIPFIT_SEND_NOTIFICATION;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, notification.getId());
             stmt.setInt(2, notification.getUserId());
