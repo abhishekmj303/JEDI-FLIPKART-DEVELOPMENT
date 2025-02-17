@@ -148,8 +148,6 @@ public class FlipFitApplication {
 
         int userId = userBusiness.addUser(name, email, password, 2);
         gymOwnerBusiness.addGymOwner(userId, "1234567812345678", "CKOE1234M", "9876543210");
-        
-        System.out.println("Gym Owner registered successfully!");
     }
 
     /**
@@ -167,7 +165,5 @@ public class FlipFitApplication {
         String newPassword = scanner.nextLine();
 
         userBusiness.updatePassword(email, oldPassword, newPassword);
-        
-        System.out.println("Password changed successfully!");
     }
 }

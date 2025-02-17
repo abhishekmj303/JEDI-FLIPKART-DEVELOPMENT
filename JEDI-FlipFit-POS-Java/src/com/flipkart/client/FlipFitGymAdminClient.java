@@ -39,6 +39,6 @@ public class FlipFitGymAdminClient {
                     System.out.println("Invalid choice! Please try again.");
                     break;
             }
-        } while (choice != 4);
+        } while (choice != 5);
     }
 }

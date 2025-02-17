@@ -24,9 +24,8 @@ public class FlipFitGymCustomerBusiness implements FlipFitGymCustomerInterface {
     }
 
     // 2. Set Preferred City
-    public void setPreferredCity(String userId, String city) {
-        int id = Integer.parseInt(userId);
-        gymCustomerDao.setPreferredCity(id, city);
+    public void setPreferredCity(int userId, String city) {
+        gymCustomerDao.setPreferredCity(userId, city);
     }
 
     // 3. Book a Slot

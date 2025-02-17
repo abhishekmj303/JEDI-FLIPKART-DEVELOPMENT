@@ -24,7 +24,7 @@ public class FlipFitGymCustomerClient {
                 case 1:
                     System.out.print("Enter city: ");
                     city = scanner.nextLine();
-                    gymCustomerBusiness.setPreferredCity(user.getEmail(), city);
+                    gymCustomerBusiness.setPreferredCity(user.getId(), city);
                     break;
                 case 2:
                 	gymCustomerBusiness.listAllCentersByCity(city);
