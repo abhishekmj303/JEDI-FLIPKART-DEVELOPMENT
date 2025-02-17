@@ -9,7 +9,6 @@ package com.flipkart.business;
  * and listing all gym owners and centers.
  */
 public interface FlipFitGymAdminInterface {
-<<<<<<< HEAD
     
     /**
      * Adds a new gym admin based on the provided user ID.
@@ -23,7 +22,7 @@ public interface FlipFitGymAdminInterface {
      * 
      * @param userId The ID of the gym owner to be approved.
      */
-    public void approveGymOwner(int userId);
+	public void approveGymOwner(int userId);
     
     /**
      * Approves a gym center based on the provided center ID.
@@ -41,15 +40,5 @@ public interface FlipFitGymAdminInterface {
      * Lists all the gym owners in the system.
      */
     public void listAllGymOwners();
-=======
-	public void addGymAdmin(int userId);
-	
-	public void approveGymOwner(int userId);
-	
-	public void approveGymCentre(int centreId);
-	
-	public void listAllGymCentres();
-	
-	public void listAllGymOwners();
->>>>>>> 2b379df129282e95fc550c917e3596d9a689a9bc
+
 }

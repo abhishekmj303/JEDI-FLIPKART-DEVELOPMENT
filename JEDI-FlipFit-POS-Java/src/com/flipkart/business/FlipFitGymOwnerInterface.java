@@ -6,7 +6,7 @@ package com.flipkart.business;
  */
 public interface FlipFitGymOwnerInterface {
     
-<<<<<<< HEAD
+
     /**
      * Adds a new gym owner based on the provided details.
      * 
@@ -22,15 +22,11 @@ public interface FlipFitGymOwnerInterface {
      * 
      * @param email The email of the gym owner.
      */
-    public void addCenterAndSlot(String email);
+    public void addCenterAndSlot(int ownerId);
     
     /**
      * Views the status of the available slots in the gym.
      * This method provides information about whether slots are available or fully booked.
      */
-=======
-    public void addCenterAndSlot(int ownerId);
-
->>>>>>> 2b379df129282e95fc550c917e3596d9a689a9bc
     public void viewSlotsStatus();
 }
