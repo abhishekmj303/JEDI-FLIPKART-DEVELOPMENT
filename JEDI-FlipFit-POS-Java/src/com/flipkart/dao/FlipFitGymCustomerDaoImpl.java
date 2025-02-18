@@ -58,7 +58,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
         String sql = SQLConstant.FLIPFIT_BOOK_SLOT;
         int bookingId = -1;
         
-        int existingBookingId = checkPrevSlot(booking.getCustomerId(), booking.getDateTime().toLocalDate());
+        int existingBookingId = checkPrevSlot(booking.getCustomerId(), booking.getDate());
         if (existingBookingId != 0) {
             cancelBooking(existingBookingId);
             refundPayment(existingBookingId);
@@ -69,7 +69,7 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
             try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setInt(1, booking.getSlotId());
                 stmt.setInt(2, booking.getCustomerId());
-                stmt.setDate(3, Date.valueOf(booking.getDateTime().toLocalDate()));
+                stmt.setDate(3, Date.valueOf(booking.getDate()));
         
                 int rowsInserted = stmt.executeUpdate();
                 if (rowsInserted > 0) {
@@ -218,21 +218,25 @@ public class FlipFitGymCustomerDaoImpl implements FlipFitGymCustomerDao {
     }
 
     // 7. View Booked Slots for a given customer (query slotBooking table)
-    public void viewBookedSlots(int userId) {
+    public List<FlipFitSlotBooking> viewBookedSlots(int userId) {
+    	List<FlipFitSlotBooking> bookings = new ArrayList<>();
+    	
         String sql = SQLConstant.FLIPFIT_FETCH_BOOKINGS_BY_CUSTOMER;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("Booked slots for user " + userId + ":");
             while (rs.next()) {
                 int bookingId = rs.getInt("id");
                 int slotId = rs.getInt("slotId");
                 Date date = rs.getDate("date");
-                System.out.println("Booking ID: " + bookingId + ", Slot ID: " + slotId + ", Date: " + date);
+                
+                FlipFitSlotBooking booking = new FlipFitSlotBooking(bookingId, slotId, userId, date.toLocalDate());
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return bookings;
     }
 
     // 8. Process Payment (insert into payment table)

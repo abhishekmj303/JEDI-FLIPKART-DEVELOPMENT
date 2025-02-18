@@ -4,6 +4,12 @@ import java.util.Scanner;
 import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymCustomerInterface;
 import com.flipkart.business.FlipFitUserInterface;
+import com.flipkart.exception.BookingFailedException;
+import com.flipkart.exception.BookingNotFoundException;
+import com.flipkart.exception.GymCenterNotFoundException;
+import com.flipkart.exception.NoAvailableSeatsException;
+import com.flipkart.exception.PaymentFailedException;
+import com.flipkart.exception.UserNotFoundException;
 
 public class FlipFitGymCustomerClient {
     public static void showGymCustomerMenu(Scanner scanner, FlipFitGymCustomerInterface gymCustomerBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
@@ -26,16 +32,32 @@ public class FlipFitGymCustomerClient {
                     break;
                 case 2:
                     System.out.println("Booking a slot...");
-                    gymCustomerBusiness.bookSlot(user.getId());
+				try {
+					gymCustomerBusiness.bookSlot(user.getId());
+				} catch (GymCenterNotFoundException | NoAvailableSeatsException | BookingFailedException
+						| PaymentFailedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                     break;
                 case 3:
                 	gymCustomerBusiness.viewBookedSlots(user.getId());
                     break;
                 case 4:
-                	gymCustomerBusiness.cancelBooking(user.getId());
+				try {
+					gymCustomerBusiness.cancelBooking(user.getId());
+				} catch (BookingNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 	break;
                 case 5:
-                    userBusiness.updateUser(user.getId());
+				try {
+					userBusiness.updateUser(user.getId());
+				} catch (UserNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                     break;
                 case 6:
                     userBusiness.logout(user.getEmail());

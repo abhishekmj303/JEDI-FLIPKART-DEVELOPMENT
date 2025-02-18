@@ -12,6 +12,7 @@ import com.flipkart.business.FlipFitGymOwnerBusiness;
 import com.flipkart.business.FlipFitGymOwnerInterface;
 import com.flipkart.business.FlipFitUserBusiness;
 import com.flipkart.business.FlipFitUserInterface;
+import com.flipkart.exception.InvalidCredentialsException;
 
 public class FlipFitApplication {
 
@@ -90,7 +91,13 @@ public class FlipFitApplication {
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
         
-        FlipFitUser user = userBusiness.login(email, password);
+        FlipFitUser user = null;
+		try {
+			user = userBusiness.login(email, password);
+		} catch (InvalidCredentialsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         if (user == null) {
         	return;
         }
@@ -167,6 +174,11 @@ public class FlipFitApplication {
         System.out.print("Enter new password: ");
         String newPassword = scanner.nextLine();
 
-        userBusiness.updatePassword(email, oldPassword, newPassword);
+        try {
+			userBusiness.updatePassword(email, oldPassword, newPassword);
+		} catch (InvalidCredentialsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

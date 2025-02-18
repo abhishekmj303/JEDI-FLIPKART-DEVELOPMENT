@@ -1,6 +1,6 @@
 package com.flipkart.bean;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class FlipFitSlotBooking {
     private int id;
@@ -49,25 +49,25 @@ public class FlipFitSlotBooking {
 	/**
 	 * @return the dateTime
 	 */
-	public LocalDateTime getDateTime() {
-		return dateTime;
+	public LocalDate getDate() {
+		return date;
 	}
 
 	/**
 	 * @param dateTime the dateTime to set
 	 */
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	private int slotId;
     private int customerId;
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
-    public FlipFitSlotBooking(int id, int slotId, int customerId, LocalDateTime dateTime) {
+    public FlipFitSlotBooking(int id, int slotId, int customerId, LocalDate date) {
         this.id = id;
         this.slotId = slotId;
         this.customerId = customerId;
-        this.dateTime = dateTime;
+        this.date = date;
     }
 }

@@ -5,6 +5,10 @@ import java.util.Scanner;
 import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymOwnerInterface;
 import com.flipkart.business.FlipFitUserInterface;
+import com.flipkart.exception.CenterCreationFailedException;
+import com.flipkart.exception.InvalidCenterDetailsException;
+import com.flipkart.exception.InvalidTimeFormatException;
+import com.flipkart.exception.UserNotFoundException;
 
 public class FlipFitGymOwnerClient {
     public static void showGymOwnerMenu(Scanner scanner, FlipFitGymOwnerInterface gymOwnerBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
@@ -20,13 +24,23 @@ public class FlipFitGymOwnerClient {
             
             switch (choice) {
                 case 1:
-                    gymOwnerBusiness.addCenterAndSlot(user.getId());
+				try {
+					gymOwnerBusiness.addCenterAndSlot(user.getId());
+				} catch (InvalidCenterDetailsException | InvalidTimeFormatException | CenterCreationFailedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                     break;
                 case 2:
                     gymOwnerBusiness.viewAllCenters(user.getId());
                     break;
                 case 3:
-                	userBusiness.updateUser(user.getId());
+				try {
+					userBusiness.updateUser(user.getId());
+				} catch (UserNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 	break;
                 case 4:
                     userBusiness.logout(user.getEmail());

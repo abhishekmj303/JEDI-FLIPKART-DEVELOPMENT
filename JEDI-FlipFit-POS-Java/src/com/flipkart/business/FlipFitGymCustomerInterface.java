@@ -5,14 +5,20 @@
  */
 package com.flipkart.business;
 
+import com.flipkart.exception.BookingFailedException;
+import com.flipkart.exception.BookingNotFoundException;
+import com.flipkart.exception.GymCenterNotFoundException;
+import com.flipkart.exception.NoAvailableSeatsException;
+import com.flipkart.exception.PaymentFailedException;
+
 /**
  * Interface for FlipFit gym customer operations.
  */
 public interface FlipFitGymCustomerInterface {
 	public void addGymCustomer(int userId);
 	public void setPreferredCity(int userId);
-	public void bookSlot(int userId);
-	public boolean cancelBooking(int userId);
+	public void bookSlot(int userId) throws GymCenterNotFoundException, NoAvailableSeatsException, BookingFailedException, PaymentFailedException;
+	public boolean cancelBooking(int userId) throws BookingNotFoundException;
 	public void listAllCentersByCity(String city);
 	public void viewAvailableSlots(int gymCenterId);
 	public void viewBookedSlots(int userId);

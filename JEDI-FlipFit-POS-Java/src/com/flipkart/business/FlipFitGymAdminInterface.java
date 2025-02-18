@@ -5,6 +5,9 @@
  */
 package com.flipkart.business;
 
+import com.flipkart.exception.GymCenterNotFoundException;
+import com.flipkart.exception.GymOwnerNotFoundException;
+
 /**
  * Interface for FlipFit gym admin operations.
  */
@@ -13,12 +16,12 @@ public interface FlipFitGymAdminInterface {
     /**
      * Approves a gym owner.
      */
-    public void approveGymOwner();
+	public void approveGymOwner() throws GymOwnerNotFoundException;
 
     /**
      * Approves a gym centre.
      */
-    public void approveGymCentre();
+	public void approveGymCentre() throws GymCenterNotFoundException;
 
     /**
      * Lists all the gym centres.

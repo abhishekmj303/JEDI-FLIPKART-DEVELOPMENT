@@ -1,6 +1,9 @@
 package com.flipkart.business;
 
 import com.flipkart.bean.FlipFitUser;
+import com.flipkart.exception.IncorrectOldPasswordException;
+import com.flipkart.exception.InvalidCredentialsException;
+import com.flipkart.exception.UserNotFoundException;
 
 /**
  * Interface for managing user-related operations in the FlipFit gym system.
@@ -25,8 +28,9 @@ public interface FlipFitUserInterface {
      * 
      * @param userId The ID of the user to be updated.
      * @return true if the user was successfully updated, false otherwise.
+     * @throws UserNotFoundException 
      */
-    public boolean updateUser(int userId);
+    public boolean updateUser(int userId) throws UserNotFoundException;
 
     /**
      * Updates the password for a user.
@@ -35,8 +39,9 @@ public interface FlipFitUserInterface {
      * @param oldPassword The current password of the user.
      * @param newPassword The new password to be set for the user.
      * @return true if the password was successfully updated, false otherwise.
+     * @throws InvalidCredentialsException 
      */
-    public boolean updatePassword(String email, String oldPassword, String newPassword);
+    public boolean updatePassword(String email, String oldPassword, String newPassword) throws InvalidCredentialsException;
 
     /**
      * Lists all users in the system.
@@ -49,8 +54,9 @@ public interface FlipFitUserInterface {
      * @param email The email of the user.
      * @param password The password of the user.
      * @return The user object if login is successful, null otherwise.
+     * @throws InvalidCredentialsException 
      */
-    public FlipFitUser login(String email, String password);
+    public FlipFitUser login(String email, String password) throws InvalidCredentialsException;
 
     /**
      * Logs out a user.

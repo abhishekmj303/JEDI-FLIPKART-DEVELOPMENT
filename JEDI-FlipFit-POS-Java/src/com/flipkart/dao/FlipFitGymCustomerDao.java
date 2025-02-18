@@ -64,8 +64,9 @@ public interface FlipFitGymCustomerDao {
      * Views the slots booked by a gym customer.
      * 
      * @param userId The ID of the customer whose bookings are to be viewed.
+     * @return 
      */
-    public void viewBookedSlots(int userId);
+    public List<FlipFitSlotBooking> viewBookedSlots(int userId);
 
     /**
      * Processes a payment for a gym customer.

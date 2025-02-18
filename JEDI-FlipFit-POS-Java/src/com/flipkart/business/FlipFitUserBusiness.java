@@ -3,6 +3,9 @@ package com.flipkart.business;
 import com.flipkart.bean.FlipFitUser;
 import com.flipkart.dao.FlipFitUserDao;
 import com.flipkart.dao.FlipFitUserDaoImpl;
+import com.flipkart.exception.IncorrectOldPasswordException;
+import com.flipkart.exception.InvalidCredentialsException;
+import com.flipkart.exception.UserNotFoundException;
 
 public class FlipFitUserBusiness implements FlipFitUserInterface {
     private FlipFitUserDao userDao;
@@ -22,22 +25,22 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
         return userId;
     }
 
-    public boolean updateUser(int userId) {
+    public boolean updateUser(int userId) throws UserNotFoundException {
         if (userDao.updateUser(userId)) {
             System.out.println("User name updated !!");
             return true;
+        } else {
+            throw new UserNotFoundException("User not found: " + userId);  // Throw exception
         }
-        System.out.println("User not found: " + userId);
-        return false;
     }
 
-    public boolean updatePassword(String email, String oldPassword, String newPassword) {
+    public boolean updatePassword(String email, String oldPassword, String newPassword) throws InvalidCredentialsException {
         if (userDao.updatePassword(email, oldPassword, newPassword)) {
             System.out.println("Password updated successfully for: " + email);
             return true;
+        } else {
+            throw new InvalidCredentialsException("Incorrect old password for: " + email); // Throw exception
         }
-        System.out.println("Incorrect old password or user not found: " + email);
-        return false;
     }
 
     public void listAllUsers() {
@@ -45,12 +48,12 @@ public class FlipFitUserBusiness implements FlipFitUserInterface {
         userDao.listAllUsers();
     }
 
-    public FlipFitUser login(String email, String password) {
+    public FlipFitUser login(String email, String password) throws InvalidCredentialsException {
     	FlipFitUser user = userDao.login(email, password);
         if (user != null) {
             System.out.println("User logged in: " + email);
         } else {
-        	System.out.println("Invalid login credentials for: " + email);
+        	throw new InvalidCredentialsException("Invalid login credentials for: " + email);
         }
         return user;
     }

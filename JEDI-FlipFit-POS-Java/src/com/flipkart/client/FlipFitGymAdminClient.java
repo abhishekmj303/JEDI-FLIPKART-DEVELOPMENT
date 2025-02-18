@@ -5,6 +5,9 @@ import java.util.Scanner;
 import com.flipkart.bean.FlipFitUser;
 import com.flipkart.business.FlipFitGymAdminInterface;
 import com.flipkart.business.FlipFitUserInterface;
+import com.flipkart.exception.GymCenterNotFoundException;
+import com.flipkart.exception.GymOwnerNotFoundException;
+import com.flipkart.exception.UserNotFoundException;
 
 public class FlipFitGymAdminClient {
     public static void showGymAdminMenu(Scanner scanner, FlipFitGymAdminInterface adminBusiness, FlipFitUserInterface userBusiness, FlipFitUser user) {
@@ -22,19 +25,34 @@ public class FlipFitGymAdminClient {
             
             switch (choice) {
             	case 1:
-            		adminBusiness.approveGymOwner();
+				try {
+					adminBusiness.approveGymOwner();
+				} catch (GymOwnerNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             		break;
             	case 2:
             		adminBusiness.listAllGymOwners();
             		break;
                 case 3:
-                	adminBusiness.approveGymCentre();
+				try {
+					adminBusiness.approveGymCentre();
+				} catch (GymCenterNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                     break;
                 case 4:
                 	adminBusiness.listAllGymCentres();
                     break;
                 case 5:
-                	userBusiness.updateUser(user.getId());
+				try {
+					userBusiness.updateUser(user.getId());
+				} catch (UserNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 	break;
                 case 6:
                 	userBusiness.logout(user.getEmail());
